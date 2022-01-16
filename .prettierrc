@@ -1,0 +1,43 @@
+{
+	"tabWidth": 4,
+	"endOfLine": "lf",
+	"printWidth": 120,
+	"useTabs": true,
+	"semi": true,
+	"arrowParens": "always",
+	"bracketSpacing": true,
+	"importOrder": [
+		"^[a-z].+$",
+		"^@[a-z].+$",
+		"^[A-Z].+$",
+		"^[\\.\\/].+$"
+	],
+	"importOrderSeparation": true,
+	"jsxBracketSameLine": false,
+	"jsxSingleQuote": false,
+	"htmlWhiteSpaceSensitivity": "ignore",
+	"eslintIntegration": true,
+	"tslintIntegration": true,
+	"overrides": [
+		{
+			"files": [
+				"*.json",
+				"*.code-snippets",
+				"*.code-workspace",
+				".prettierrc"
+			],
+			"options": {
+				"printWidth": 0
+			}
+		},
+		{
+			"files": [
+				"*.yaml",
+				"*.yml"
+			],
+			"options": {
+				"tabWidth": 2
+			}
+		}
+	]
+}

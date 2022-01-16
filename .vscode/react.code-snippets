@@ -1,0 +1,84 @@
+{
+	"Separator": {
+		"scope": "javascript, typescript, javascriptreact, typescriptreact",
+		"prefix": "sep",
+		"body": [
+			"/*****************************************************************************/"
+		]
+	},
+	"React Component": {
+		"prefix": "reactc",
+		"description": "React component",
+		"scope": "javascript, typescript, javascriptreact, typescriptreact",
+		"body": [
+			"import React from \"react\";",
+			"",
+			"type Props = React.PropsWithChildren<{}>;",
+			"",
+			"const $1 = ({ children }: Props) => {",
+			"\treturn <div>{children}</div>;",
+			"};",
+			"",
+			"export { $1 };",
+			""
+		]
+	},
+	"Styled React Component": {
+		"prefix": "styledc",
+		"description": "React component with Styled component",
+		"scope": "javascript, typescript, javascriptreact, typescriptreact",
+		"body": [
+			"import React from \"react\";",
+			"import styled from \"styled-components\";",
+			"",
+			"type Props = React.PropsWithChildren<{}>;",
+			"",
+			"const $1 = ({ children }: Props) => {",
+			"\treturn <Styles>{children}</Styles>;",
+			"};",
+			"",
+			"export { $1 };",
+			"",
+			"const Styles = styled.div`",
+			"\tdisplay: block;",
+			"`;",
+			""
+		]
+	},
+	"Store": {
+		"prefix": "state",
+		"description": "A Store state",
+		"scope": "",
+		"body": [
+			"import { BaseState, Action } from \"@andrew-r-king/react-kitchen\";",
+			"",
+			"class $1State extends BaseState {",
+			"\tvalue: number = 0;",
+			"",
+			"\t@Action",
+			"\tchangeValue = (inValue: number) => {",
+			"\t\tthis.value = inValue;",
+			"\t};",
+			"}",
+			"",
+			"export { $1State };",
+			""
+		]
+	},
+	"Responsiveness": {
+		"prefix": "resp",
+		"description": "Add common responsiveness",
+		"scope": "javascript, typescript, javascriptreact, typescriptreact, css",
+		"body": [
+			"@media only screen and (min-width: 40rem) {",
+			"    /**/",
+			"}",
+			"@media only screen and (min-width: 60rem) {",
+			"    /**/",
+			"}",
+			"@media only screen and (min-width: 80rem) {",
+			"    /**/",
+			"}"
+		]
+	}
+}
