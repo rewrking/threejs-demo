@@ -1,14 +1,13 @@
 import React from "react";
 
-import { Page } from "Components";
+import { Page, ThreeRootEasy } from "Components";
 
-type Props = React.PropsWithChildren<{}>;
+type Props = {};
 
-const HomeLayout = ({ children }: Props) => {
+const HomeLayout = (props: Props) => {
 	return (
 		<Page title="Home">
-			<h1>Hello world!</h1>
-			{children}
+			<ThreeRootEasy />
 		</Page>
 	);
 };

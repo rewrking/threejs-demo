@@ -61,7 +61,6 @@ const Main = styled.main<NavBarProps>`
 const Container = styled.div`
 	display: block;
 	position: relative;
-	max-width: 54rem;
-	padding: 1rem;
+	padding: 0;
 	margin: 0 auto;
 `;
