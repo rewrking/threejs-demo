@@ -11,7 +11,7 @@ const PlaneMesh = (props: Props) => {
 	}));
 	return (
 		<mesh ref={ref}>
-			<planeBufferGeometry attach="geometry" args={[100, 100]} />
+			<planeBufferGeometry attach="geometry" args={[10, 10]} />
 			<meshLambertMaterial attach="material" color="lightblue" />
 		</mesh>
 	);

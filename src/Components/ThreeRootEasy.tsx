@@ -15,7 +15,7 @@ const ThreeRootEasy = ({ children }: Props) => {
 		<Styles>
 			<Canvas>
 				<OrbitControls />
-				<Stars />
+				{/* <Stars /> */}
 				<ambientLight intensity={0.5} />
 				<spotLight position={[10, 15, 10]} angle={0.3} />
 				<Physics>
@@ -29,7 +29,7 @@ const ThreeRootEasy = ({ children }: Props) => {
 
 const Styles = styled.div`
 	display: block;
-	background: black;
+	background: transparent;
 	width: 100vw;
 	height: 100vh;
 `;

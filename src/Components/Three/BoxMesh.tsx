@@ -12,7 +12,7 @@ const BoxMesh = (props: Props) => {
 	return (
 		<mesh
 			onClick={() => {
-				api.velocity.set(0, 2, 0);
+				api.velocity.set(0, 20, 0);
 			}}
 			ref={ref}
 		>

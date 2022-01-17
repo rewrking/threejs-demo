@@ -1,6 +1,6 @@
 import { createStore, makeRootStoreProvider } from "@andrew-r-king/react-kitchen";
 
-import { UiState } from "./UiState";
+import { UiState } from "./UiState2";
 
 const [UiStoreProvider, useUiStore, uiStore] = createStore(UiState);
 
