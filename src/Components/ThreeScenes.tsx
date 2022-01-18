@@ -9,10 +9,10 @@ import { StoreProps as FiberStoreProps } from "@react-three/fiber/dist/declarati
 import { useUiStore } from "Stores";
 import { ThreeScene } from "Types";
 
-import { BoxMesh, BoxMeshPhysics, PlaneMesh, PlaneMeshPhysics, SphereMesh } from "./Three";
+import { BoxMeshPhysics, PlaneMeshPhysics, SphereMesh } from "./Three";
 
 type Props = {
-	camera: FiberStoreProps["camera"];
+	camera?: FiberStoreProps["camera"];
 };
 
 const ThreeSceneBox = ({ camera }: Props) => {
@@ -36,7 +36,7 @@ const ThreeSceneBox = ({ camera }: Props) => {
 						position={[0, 2, 0]}
 						color="hotpink"
 						onClick={(api) => {
-							api.velocity.set(0, 10, 0);
+							api.velocity.set(0, 5, 0);
 						}}
 						castShadow
 					/>
@@ -74,10 +74,10 @@ const ThreeSceneRouter = (props: Props) => {
 	const { scene } = useUiStore();
 	switch (scene) {
 		case ThreeScene.Stars:
-			return <ThreeSceneStars {...props} />;
+			return <ThreeSceneStars camera={{ position: [0, 15, 30] }} {...props} />;
 		case ThreeScene.Box:
 		default:
-			return <ThreeSceneBox {...props} />;
+			return <ThreeSceneBox camera={{ position: [-3, 2, 5] }} {...props} />;
 	}
 };
 
