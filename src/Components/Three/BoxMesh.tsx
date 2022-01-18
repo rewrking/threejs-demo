@@ -32,7 +32,7 @@ const BoxMeshPhysics = ({ children, position, onClick, color }: Props & PhysicsP
 	);
 };
 
-const BoxMesh = ({ position, color }: Props) => {
+const BoxMesh = ({ children, position, color }: Props) => {
 	return (
 		<mesh position={position ?? [0, 0, 0]}>
 			<boxBufferGeometry attach="geometry" />

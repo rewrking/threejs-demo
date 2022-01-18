@@ -11,7 +11,7 @@ type Props = {
 };
 
 const Page = ({ title, children }: Props) => {
-	const { theme, initialize, initialized, navWidth, navOpen } = useUiStore();
+	const { theme, initialize, initialized } = useUiStore();
 
 	useEffect(() => {
 		if (!initialized) {
@@ -32,7 +32,7 @@ const Page = ({ title, children }: Props) => {
 					content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
 				/>
 			</Head>
-			<Main {...{ navWidth }}>
+			<Main>
 				<Container>{!initialized ? "" : children}</Container>
 			</Main>
 		</>
@@ -41,11 +41,7 @@ const Page = ({ title, children }: Props) => {
 
 export { Page };
 
-type NavBarProps = {
-	navWidth: string;
-};
-
-const Main = styled.main<NavBarProps>`
+const Main = styled.main`
 	display: block;
 	position: absolute;
 	min-height: 100vh;
