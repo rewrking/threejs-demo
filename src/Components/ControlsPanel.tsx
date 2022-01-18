@@ -2,14 +2,15 @@ import React from "react";
 import styled from "styled-components";
 
 import { useUiStore } from "Stores";
-import { getCssVariable } from "Theme";
+import { getCssVariable, Theme } from "Theme";
 import { ThreeScene } from "Types";
 
 const ControlsPanel = () => {
-	const { setScene } = useUiStore();
+	const { scene, setScene, themeId, setTheme } = useUiStore();
 	return (
 		<Styles>
 			<button
+				className={scene === ThreeScene.Box ? "active" : ""}
 				onClick={(ev) => {
 					ev.preventDefault();
 					setScene(ThreeScene.Box);
@@ -18,12 +19,22 @@ const ControlsPanel = () => {
 				Box
 			</button>
 			<button
+				className={scene === ThreeScene.Stars ? "active" : ""}
 				onClick={(ev) => {
 					ev.preventDefault();
 					setScene(ThreeScene.Stars);
 				}}
 			>
 				Stars
+			</button>
+			<hr />
+			<button
+				onClick={(ev) => {
+					ev.preventDefault();
+					setTheme(themeId === Theme.Light ? Theme.Dark : Theme.Light);
+				}}
+			>
+				Theme
 			</button>
 		</Styles>
 	);
@@ -50,11 +61,15 @@ const Styles = styled.div`
 	> button {
 		background-color: transparent;
 		color: ${getCssVariable("mainText")};
-		border: 0.0675rem solid ${getCssVariable("primaryColor")};
+		border: 0.0675rem solid transparent;
 		padding: 0.5rem 1rem;
 		transition: background-color 0.125s linear;
 		border-radius: 0.25rem;
 		cursor: pointer;
+
+		&.active {
+			border-color: ${getCssVariable("primaryColor")};
+		}
 
 		&:hover {
 			color: ${getCssVariable("background")};

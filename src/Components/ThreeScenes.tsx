@@ -4,17 +4,22 @@ import styled from "styled-components";
 import { Physics } from "@react-three/cannon";
 import { OrbitControls, Stars } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
+import { StoreProps as FiberStoreProps } from "@react-three/fiber/dist/declarations/src/core/store";
 
 import { useUiStore } from "Stores";
 import { ThreeScene } from "Types";
 
 import { BoxMesh, BoxMeshPhysics, PlaneMesh, PlaneMeshPhysics, SphereMesh } from "./Three";
 
-const ThreeSceneBox = () => {
+type Props = {
+	camera: FiberStoreProps["camera"];
+};
+
+const ThreeSceneBox = ({ camera }: Props) => {
 	const { theme } = useUiStore();
 	return (
 		<Styles>
-			<Canvas shadows camera={{ position: [-3, 2, 5], fov: 90 }}>
+			<Canvas shadows {...{ camera }}>
 				<OrbitControls />
 				<ambientLight position={[0, 0, 0]} intensity={0.5} />
 				<directionalLight
@@ -48,11 +53,11 @@ const ThreeSceneBox = () => {
 	);
 };
 
-const ThreeSceneStars = () => {
+const ThreeSceneStars = ({ camera }: Props) => {
 	const { theme } = useUiStore();
 	return (
 		<Styles>
-			<Canvas shadows camera={{ position: [-3, 2, 5], fov: 90 }}>
+			<Canvas shadows {...{ camera }}>
 				<OrbitControls />
 				<Stars />
 				<ambientLight position={[0, 0, 0]} intensity={0.5} />
@@ -65,14 +70,14 @@ const ThreeSceneStars = () => {
 	);
 };
 
-const ThreeSceneRouter = () => {
+const ThreeSceneRouter = (props: Props) => {
 	const { scene } = useUiStore();
 	switch (scene) {
 		case ThreeScene.Stars:
-			return <ThreeSceneStars />;
+			return <ThreeSceneStars {...props} />;
 		case ThreeScene.Box:
 		default:
-			return <ThreeSceneBox />;
+			return <ThreeSceneBox {...props} />;
 	}
 };
 

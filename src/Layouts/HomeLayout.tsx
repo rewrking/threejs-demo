@@ -8,7 +8,7 @@ type Props = {};
 const HomeLayout = (props: Props) => {
 	return (
 		<Page title="Home">
-			<ThreeSceneRouter />
+			<ThreeSceneRouter camera={{ position: [-3, 2, 5] }} />
 			<ControlsPanel />
 		</Page>
 	);

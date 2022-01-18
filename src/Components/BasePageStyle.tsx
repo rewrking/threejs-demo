@@ -140,7 +140,6 @@ const BaseStyle = createGlobalStyle`
 		outline: 0;
 		background-color: ${getCssVariable("border")};
 		margin: 1rem auto;
-		margin-bottom: 2rem;
 		height: 0.0625rem;
 		width: 100%;
 		text-align: center;
