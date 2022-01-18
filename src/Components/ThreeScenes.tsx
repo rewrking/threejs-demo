@@ -14,10 +14,18 @@ const ThreeSceneBox = () => {
 	const { theme } = useUiStore();
 	return (
 		<Styles>
-			<Canvas>
+			<Canvas shadows camera={{ position: [-3, 2, 5], fov: 90 }}>
 				<OrbitControls />
 				<ambientLight position={[0, 0, 0]} intensity={0.5} />
-				<spotLight position={[10, 15, 10]} angle={0.5} intensity={2.0} />
+				<directionalLight
+					position={[0, 10, 0]}
+					intensity={1.5}
+					castShadow
+					shadow-mapSize-height={512}
+					shadow-mapSize-width={512}
+				/>
+				<pointLight position={[-10, 0, -20]} intensity={0.5} />
+				<pointLight position={[0, -10, 0]} intensity={1.5} />
 				<Physics>
 					<BoxMeshPhysics
 						position={[0, 2, 0]}
@@ -25,8 +33,15 @@ const ThreeSceneBox = () => {
 						onClick={(api) => {
 							api.velocity.set(0, 10, 0);
 						}}
+						castShadow
 					/>
-					<PlaneMeshPhysics size={[10, 10]} position={[0, 0, 0]} color={theme.primaryColor} />
+					<PlaneMeshPhysics
+						size={[10, 10]}
+						position={[0, 0, 0]}
+						color={theme.primaryColor}
+						receiveShadow
+						shadowOpacity={0.5}
+					/>
 				</Physics>
 			</Canvas>
 		</Styles>
@@ -37,7 +52,7 @@ const ThreeSceneStars = () => {
 	const { theme } = useUiStore();
 	return (
 		<Styles>
-			<Canvas>
+			<Canvas shadows camera={{ position: [-3, 2, 5], fov: 90 }}>
 				<OrbitControls />
 				<Stars />
 				<ambientLight position={[0, 0, 0]} intensity={0.5} />

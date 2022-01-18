@@ -12,9 +12,10 @@ type PhysicsProps = {
 type Props = React.PropsWithChildren<{}> & {
 	position: Vec3;
 	color?: Color;
+	castShadow?: boolean;
 };
 
-const BoxMeshPhysics = ({ children, position, onClick, color }: Props & PhysicsProps) => {
+const BoxMeshPhysics = ({ children, position, onClick, color, castShadow }: Props & PhysicsProps) => {
 	const [ref, api] = useBox(
 		() => ({
 			position: position ?? [0, 0, 0],
@@ -24,7 +25,7 @@ const BoxMeshPhysics = ({ children, position, onClick, color }: Props & PhysicsP
 		[position]
 	);
 	return (
-		<mesh onClick={() => onClick?.(api)} ref={ref}>
+		<mesh onClick={() => onClick?.(api)} {...{ ref, castShadow }}>
 			<boxBufferGeometry attach="geometry" />
 			<meshLambertMaterial attach="material" {...{ color }} />
 			{children}
@@ -32,9 +33,9 @@ const BoxMeshPhysics = ({ children, position, onClick, color }: Props & PhysicsP
 	);
 };
 
-const BoxMesh = ({ children, position, color }: Props) => {
+const BoxMesh = ({ children, position, color, castShadow }: Props) => {
 	return (
-		<mesh position={position ?? [0, 0, 0]}>
+		<mesh position={position ?? [0, 0, 0]} {...{ castShadow }}>
 			<boxBufferGeometry attach="geometry" />
 			<meshLambertMaterial attach="material" {...{ color }} />
 			{children}

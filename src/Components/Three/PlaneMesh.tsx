@@ -9,9 +9,11 @@ type Props = React.PropsWithChildren<{}> & {
 	size: Vec2;
 	position?: Vec3;
 	color?: Color;
+	receiveShadow?: boolean;
+	shadowOpacity?: number;
 };
 
-const PlaneMeshPhysics = ({ children, size, position, color }: Props) => {
+const PlaneMeshPhysics = ({ children, size, position, color, receiveShadow, shadowOpacity }: Props) => {
 	const [ref, api] = usePlane(
 		() => ({
 			position: position ?? [0, 0, 0],
@@ -21,19 +23,21 @@ const PlaneMeshPhysics = ({ children, size, position, color }: Props) => {
 		[position]
 	);
 	return (
-		<mesh ref={ref}>
+		<mesh {...{ ref, receiveShadow }}>
 			<planeBufferGeometry attach="geometry" args={[...size]} />
 			<meshLambertMaterial attach="material" {...{ color }} />
+			{/* {!!receiveShadow && <shadowMaterial attach="material" opacity={shadowOpacity} />} */}
 			{children}
 		</mesh>
 	);
 };
 
-const PlaneMesh = ({ children, size, position, color }: Props) => {
+const PlaneMesh = ({ children, size, position, color, receiveShadow, shadowOpacity }: Props) => {
 	return (
-		<mesh position={position ?? [0, 0, 0]} rotation={[-Math.PI / 2.0, 0, 0]}>
+		<mesh position={position ?? [0, 0, 0]} rotation={[-Math.PI / 2.0, 0, 0]} {...{ receiveShadow }}>
 			<planeBufferGeometry attach="geometry" args={[...size]} />
 			<meshLambertMaterial attach="material" {...{ color }} />
+			{/* {!!receiveShadow && <shadowMaterial attach="material" opacity={shadowOpacity} />} */}
 			{children}
 		</mesh>
 	);

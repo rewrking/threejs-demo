@@ -14,9 +14,10 @@ type Props = React.PropsWithChildren<{}> & {
 	radius: number;
 	position: Vec3;
 	color?: Color;
+	castShadow?: boolean;
 };
 
-const SphereMeshPhysics = ({ children, position, velocity, color, radius }: Props & PhysicsProps) => {
+const SphereMeshPhysics = ({ children, position, velocity, color, radius, castShadow }: Props & PhysicsProps) => {
 	const [ref, api] = useSphere(
 		() => ({
 			position: position ?? [0, 0, 0],
@@ -26,7 +27,7 @@ const SphereMeshPhysics = ({ children, position, velocity, color, radius }: Prop
 		[position]
 	);
 	return (
-		<mesh ref={ref}>
+		<mesh {...{ ref, castShadow }}>
 			<sphereBufferGeometry attach="geometry" args={[radius]} />
 			<meshLambertMaterial attach="material" {...{ color }} />
 			{children}
@@ -34,9 +35,9 @@ const SphereMeshPhysics = ({ children, position, velocity, color, radius }: Prop
 	);
 };
 
-const SphereMesh = ({ children, color, radius, position }: Props) => {
+const SphereMesh = ({ children, color, radius, position, castShadow }: Props) => {
 	return (
-		<mesh {...{ position }}>
+		<mesh {...{ position, castShadow }}>
 			<sphereBufferGeometry attach="geometry" args={[radius]} />
 			<meshLambertMaterial attach="material" {...{ color }} />
 			{children}
