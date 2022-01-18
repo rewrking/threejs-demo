@@ -14,6 +14,7 @@
 		"Layouts": "./src/Layouts",
 		"Stores": "./src/Stores",
 		"Theme": "./src/Theme",
+		"Types": "./src/Types",
 		"Utility": "./src/Utility"
 	},
 	"dependencies": {

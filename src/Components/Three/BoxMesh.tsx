@@ -1,25 +1,45 @@
 import React from "react";
 
-import { useBox } from "@react-three/cannon";
+import { PublicApi, useBox } from "@react-three/cannon";
+import { Color } from "@react-three/fiber";
 
-type Props = {};
+import { Vec3 } from "Types";
 
-const BoxMesh = (props: Props) => {
-	const [ref, api] = useBox(() => ({
-		position: [0, 2, 0],
-		mass: 1,
-	}));
+type PhysicsProps = {
+	onClick?: (api: PublicApi) => void;
+};
+
+type Props = React.PropsWithChildren<{}> & {
+	position: Vec3;
+	color?: Color;
+};
+
+const BoxMeshPhysics = ({ children, position, onClick, color }: Props & PhysicsProps) => {
+	const [ref, api] = useBox(
+		() => ({
+			position: position ?? [0, 0, 0],
+			mass: 1,
+		}),
+		undefined,
+		[position]
+	);
 	return (
-		<mesh
-			onClick={() => {
-				api.velocity.set(0, 20, 0);
-			}}
-			ref={ref}
-		>
+		<mesh onClick={() => onClick?.(api)} ref={ref}>
 			<boxBufferGeometry attach="geometry" />
-			<meshLambertMaterial attach="material" color="hotpink" />
+			<meshLambertMaterial attach="material" {...{ color }} />
+			{children}
 		</mesh>
 	);
 };
 
-export { BoxMesh };
+const BoxMesh = ({ position, color }: Props) => {
+	return (
+		<mesh position={position ?? [0, 0, 0]}>
+			<boxBufferGeometry attach="geometry" />
+			<meshLambertMaterial attach="material" {...{ color }} />
+			{children}
+		</mesh>
+	);
+};
+
+export { BoxMeshPhysics, BoxMesh };

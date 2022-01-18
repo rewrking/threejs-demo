@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Page, ThreeRootEasy } from "Components";
+import { Page, ThreeSceneRouter } from "Components";
 import { ControlsPanel } from "Components/ControlsPanel";
 
 type Props = {};
@@ -8,7 +8,7 @@ type Props = {};
 const HomeLayout = (props: Props) => {
 	return (
 		<Page title="Home">
-			<ThreeRootEasy />
+			<ThreeSceneRouter />
 			<ControlsPanel />
 		</Page>
 	);

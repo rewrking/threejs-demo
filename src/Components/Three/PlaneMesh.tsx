@@ -1,20 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { usePlane } from "@react-three/cannon";
+import { Color } from "@react-three/fiber";
 
-type Props = {};
+import { Vec2, Vec3 } from "Types";
 
-const PlaneMesh = (props: Props) => {
-	const [ref, api] = usePlane(() => ({
-		position: [0, 0, 0],
-		rotation: [-Math.PI / 2.0, 0, 0],
-	}));
+type Props = React.PropsWithChildren<{}> & {
+	size: Vec2;
+	position?: Vec3;
+	color?: Color;
+};
+
+const PlaneMeshPhysics = ({ children, size, position, color }: Props) => {
+	const [ref, api] = usePlane(
+		() => ({
+			position: position ?? [0, 0, 0],
+			rotation: [-Math.PI / 2.0, 0, 0],
+		}),
+		undefined,
+		[position]
+	);
 	return (
 		<mesh ref={ref}>
-			<planeBufferGeometry attach="geometry" args={[10, 10]} />
-			<meshLambertMaterial attach="material" color="lightblue" />
+			<planeBufferGeometry attach="geometry" args={[...size]} />
+			<meshLambertMaterial attach="material" {...{ color }} />
+			{children}
 		</mesh>
 	);
 };
 
-export { PlaneMesh };
+const PlaneMesh = ({ children, size, position, color }: Props) => {
+	return (
+		<mesh position={position ?? [0, 0, 0]} rotation={[-Math.PI / 2.0, 0, 0]}>
+			<planeBufferGeometry attach="geometry" args={[...size]} />
+			<meshLambertMaterial attach="material" {...{ color }} />
+			{children}
+		</mesh>
+	);
+};
+
+export { PlaneMeshPhysics, PlaneMesh };

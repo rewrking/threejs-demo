@@ -7,7 +7,7 @@ export const lightTheme: ThemeType = {
 	mainText: "#585565",
 	header: "#c7ccdc",
 	border: "#e3eaef",
-	primaryColor: "#71072d",
-	secondaryColor: "#f49309",
-	tertiaryColor: "#f6bb5e",
+	primaryColor: "#f49309",
+	secondaryColor: "#f6bb5e",
+	tertiaryColor: "#71072d",
 };
