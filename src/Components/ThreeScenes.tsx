@@ -43,7 +43,7 @@ const ThreeSceneBox = ({ camera }: Props) => {
 					<PlaneMeshPhysics
 						size={[10, 10]}
 						position={[0, 0, 0]}
-						color={theme.primaryColor}
+						color={theme.tertiaryColor}
 						receiveShadow
 						shadowOpacity={0.5}
 					/>
@@ -63,7 +63,7 @@ const ThreeSceneStars = ({ camera }: Props) => {
 				<ambientLight position={[0, 0, 0]} intensity={0.5} />
 				<spotLight position={[10, 15, 10]} angle={0.5} intensity={2.0} />
 				{/* <BoxMesh position={[0, 2, 0]} velocity={[0, 10, 0]} color="hotpink" /> */}
-				<SphereMesh radius={4.0} position={[0, 2, 0]} color={theme.primaryColor} />
+				<SphereMesh radius={4.0} position={[0, 2, 0]} color={theme.tertiaryColor} />
 				<SphereMesh radius={0.5} position={[10, 2, 3]} color="lightblue" />
 			</Canvas>
 		</Styles>

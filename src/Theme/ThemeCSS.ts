@@ -2,10 +2,8 @@ import { ThemeType } from "./ThemeType";
 
 const ThemeIndex: ThemeType = {
 	bodyBackground: "bg-body",
-	codeBackground: "bg-code",
 	background: "bg",
 	mainText: "main-text",
-	header: "header",
 	border: "border",
 	primaryColor: "primary-color",
 	secondaryColor: "secondary-color",
