@@ -52,6 +52,7 @@ class UiState extends BaseState {
 	@Action
 	setScene = (scene: ThreeScene) => {
 		this.scene = scene;
+		LocalStorage.set(STORAGE_KEY_SCENE, this.scene);
 	};
 }
 

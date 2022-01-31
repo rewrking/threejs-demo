@@ -5,28 +5,26 @@ import { useUiStore } from "Stores";
 import { getCssVariable, Theme } from "Theme";
 import { ThreeScene } from "Types";
 
+const availableScenes = Object.entries(ThreeScene);
+
 const ControlsPanel = () => {
 	const { scene, setScene, themeId, setTheme } = useUiStore();
 	return (
 		<Styles>
-			<button
-				className={scene === ThreeScene.Box ? "active" : ""}
-				onClick={(ev) => {
-					ev.preventDefault();
-					setScene(ThreeScene.Box);
-				}}
-			>
-				Box
-			</button>
-			<button
-				className={scene === ThreeScene.Stars ? "active" : ""}
-				onClick={(ev) => {
-					ev.preventDefault();
-					setScene(ThreeScene.Stars);
-				}}
-			>
-				Stars
-			</button>
+			{availableScenes.map(([key, value], i) => {
+				return (
+					<button
+						className={scene === value ? "active" : ""}
+						key={i}
+						onClick={(ev) => {
+							ev.preventDefault();
+							setScene(value);
+						}}
+					>
+						{key}
+					</button>
+				);
+			})}
 			<hr />
 			<button
 				onClick={(ev) => {

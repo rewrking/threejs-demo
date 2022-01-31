@@ -7,6 +7,8 @@ import { Canvas } from "@react-three/fiber";
 import { StoreProps as FiberStoreProps } from "@react-three/fiber/dist/declarations/src/core/store";
 
 import { useUiStore } from "Stores";
+import { MorphTargets } from "ThreeHelpers/MorphTargets";
+import { useThreeRenderer } from "ThreeHelpers/UseThreeRenderer";
 import { ThreeScene } from "Types";
 
 import { BoxMeshPhysics, PlaneMeshPhysics, SphereMesh } from "./Three";
@@ -70,11 +72,19 @@ const ThreeSceneStars = ({ camera }: Props) => {
 	);
 };
 
+const ThreeSceneMorphTargets = () => {
+	const { theme } = useUiStore();
+	let { ref } = useThreeRenderer(MorphTargets);
+	return <Styles ref={ref}></Styles>;
+};
+
 const ThreeSceneRouter = (props: Props) => {
 	const { scene } = useUiStore();
 	switch (scene) {
 		case ThreeScene.Stars:
 			return <ThreeSceneStars camera={{ position: [0, 15, 30] }} {...props} />;
+		case ThreeScene.MorphTargets:
+			return <ThreeSceneMorphTargets />;
 		case ThreeScene.Box:
 		default:
 			return <ThreeSceneBox camera={{ position: [-3, 2, 5] }} {...props} />;
