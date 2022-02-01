@@ -1,13 +1,18 @@
 import * as THREE from "three";
 
 abstract class ThreeBase {
-	constructor(scene: THREE.Scene) {}
+	constructor(protected scene: THREE.Scene) {}
 
 	public abstract getCamera(): THREE.Camera;
 	public abstract onCreateControls(element: HTMLElement): void;
+
 	public abstract onUpdate(): void;
 
-	onWindowResize?: () => void;
+	public onDraw(renderer: THREE.Renderer): void {
+		renderer.render(this.scene, this.getCamera());
+	}
+
+	onWindowResize?: (width: number, height: number) => void;
 	onMakeGui?: (gui: dat.GUI) => void;
 }
 

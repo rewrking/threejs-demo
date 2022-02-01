@@ -1,23 +1,22 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Physics } from "@react-three/cannon";
-import { OrbitControls, Stars } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-import { StoreProps as FiberStoreProps } from "@react-three/fiber/dist/declarations/src/core/store";
-
+// import { Physics } from "@react-three/cannon";
+// import { OrbitControls, Stars } from "@react-three/drei";
+// import { Canvas } from "@react-three/fiber";
+// import { StoreProps as FiberStoreProps } from "@react-three/fiber/dist/declarations/src/core/store";
 import { useUiStore } from "Stores";
-import { MorphTargets } from "ThreeHelpers/MorphTargets";
+import { ThreeExampleMorphTargets } from "ThreeHelpers/ThreeExampleMorphTargets";
 import { useThreeRenderer } from "ThreeHelpers/UseThreeRenderer";
 import { ThreeScene } from "Types";
 
-import { BoxMeshPhysics, PlaneMeshPhysics, SphereMesh } from "./Three";
+// import { BoxMeshPhysics, PlaneMeshPhysics, SphereMesh } from "./Three";
 
-type Props = {
-	camera?: FiberStoreProps["camera"];
-};
+// type Props = {
+// 	camera?: FiberStoreProps["camera"];
+// };
 
-const ThreeSceneBox = ({ camera }: Props) => {
+/*const ThreeSceneBox = ({ camera }: Props) => {
 	const { theme } = useUiStore();
 	return (
 		<Styles>
@@ -64,31 +63,31 @@ const ThreeSceneStars = ({ camera }: Props) => {
 				<Stars />
 				<ambientLight position={[0, 0, 0]} intensity={0.5} />
 				<spotLight position={[10, 15, 10]} angle={0.5} intensity={2.0} />
-				{/* <BoxMesh position={[0, 2, 0]} velocity={[0, 10, 0]} color="hotpink" /> */}
 				<SphereMesh radius={4.0} position={[0, 2, 0]} color={theme.tertiaryColor} />
 				<SphereMesh radius={0.5} position={[10, 2, 3]} color="lightblue" />
 			</Canvas>
 		</Styles>
 	);
-};
+};*/
 
 const ThreeSceneMorphTargets = () => {
 	const { theme } = useUiStore();
 
-	const ThreeRenderer = useThreeRenderer(MorphTargets);
+	const { ThreeRenderer } = useThreeRenderer(ThreeExampleMorphTargets);
 	return <ThreeRenderer />;
 };
 
-const ThreeSceneRouter = (props: Props) => {
+const ThreeSceneRouter = (/*props: Props*/) => {
 	const { scene } = useUiStore();
 	switch (scene) {
-		case ThreeScene.Stars:
-			return <ThreeSceneStars camera={{ position: [0, 15, 30] }} {...props} />;
+		// case ThreeScene.Stars:
+		// return <ThreeSceneStars camera={{ position: [0, 15, 30] }} {...props} />;
+		// case ThreeScene.Box:
+		// 	return <ThreeSceneBox camera={{ position: [-3, 2, 5] }} {...props} />;
 		case ThreeScene.MorphTargets:
 			return <ThreeSceneMorphTargets />;
-		case ThreeScene.Box:
 		default:
-			return <ThreeSceneBox camera={{ position: [-3, 2, 5] }} {...props} />;
+			return <ThreeSceneMorphTargets />;
 	}
 };
 

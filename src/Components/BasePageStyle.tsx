@@ -77,6 +77,38 @@ const cssReset = css`
 	}
 `;
 
+const datGuiCss = css`
+	.dg .cr.boolean {
+		border-left-color: #806787 !important;
+	}
+	.dg .cr.function {
+		border-left-color: #e61d5f !important;
+	}
+	.dg .cr.number {
+		border-left-color: ${getCssVariable("primaryColor")} !important;
+	}
+	.dg .cr.number input[type="text"] {
+		color: ${getCssVariable("primaryColor")} !important;
+	}
+	.dg .cr.string {
+		border-left-color: #1ed36f !important;
+	}
+	.dg .cr.string input[type="text"] {
+		color: #1ed36f !important;
+	}
+	.dg .c .slider-fg {
+		background-color: ${getCssVariable("primaryColor")} !important;
+	}
+	.dg .c .slider:hover .slider-fg {
+		background-color: ${getCssVariable("primaryColor")} !important;
+	}
+
+	/* dat.GUI fixes */
+	div.dg input {
+		font: 0.625rem "Lucida Grande", sans-serif !important;
+	}
+`;
+
 const BaseStyle = createGlobalStyle`
     ${cssReset}
 
@@ -131,6 +163,9 @@ const BaseStyle = createGlobalStyle`
 	.router-progress-bar {
 		z-index: 50;
 	}
+
+
+	${datGuiCss}
 `;
 
 export { BaseStyle, styleVariables };

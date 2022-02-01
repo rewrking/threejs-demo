@@ -1,5 +1,6 @@
 import * as dat from "dat.gui";
-import { RefObject, useCallback, useEffect, useRef, useState } from "react";
+import debounce from "lodash/debounce";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import * as THREE from "three";
 
@@ -9,11 +10,13 @@ import { useResize } from "Hooks";
 
 import { ThreeBase } from "./ThreeBase";
 
+const THREE_RENDERER_ID: string = "three-renderer";
+
 const ThreeRenderer = () => {
-	return <Styles id="three-renderer"></Styles>;
+	return <RendererStyles id={THREE_RENDERER_ID} />;
 };
 
-const Styles = styled.div`
+const RendererStyles = styled.div`
 	display: block;
 	background: #181132;
 	width: 100%;
@@ -25,45 +28,55 @@ export type RenderSettings = THREE.WebGLRendererParameters & {
 	height?: number;
 };
 
-let scene: Optional<THREE.Scene> = null;
-let renderer: Optional<THREE.WebGLRenderer> = null;
-let gui: Optional<dat.GUI> = null;
+export type ThreeRendererResult<T extends ThreeBase> = {
+	ThreeRenderer: typeof ThreeRenderer;
+	program: T;
+};
 
 function useThreeRenderer<T extends ThreeBase>(
 	ProgramConstructor: ClassType<T>,
 	settings: RenderSettings = {
+		alpha: true,
+		premultipliedAlpha: true,
 		antialias: true,
 	}
-): typeof ThreeRenderer {
-	const [error, setError] = useState<Optional<Error>>(null);
+): ThreeRendererResult<T> {
+	// Everything is created on the first render, so state is mutable
+	let [renderer] = useState<Optional<THREE.WebGLRenderer>>(null);
+
 	let [program] = useState<Optional<T>>(null);
+	let [gui] = useState<Optional<dat.GUI>>(null);
+
+	console.log("useThreeRenderer: render");
 
 	useResize(
-		(ev) => {
+		debounce((ev) => {
+			console.log("useThreeRenderer: resize");
 			if (!!renderer && !!program) {
-				program.onWindowResize?.();
+				program.onWindowResize?.(window.innerWidth, window.innerHeight);
 				renderer.setSize(window.innerWidth, window.innerHeight);
 			}
-		},
+		}, 500),
 		[program]
 	);
 
 	useEffect(() => {
-		const container = document.getElementById("three-renderer");
-		if (!!container && scene === null) {
-			scene = new THREE.Scene();
+		console.log("useThreeRenderer: create scene");
+		const container = document.getElementById(THREE_RENDERER_ID);
+		if (!!container) {
+			let scene = new THREE.Scene();
 
-			const { width, height, ...renderParamters } = settings;
+			const { width, height, ...renderParameters } = settings;
 
 			program = new ProgramConstructor(scene);
 
-			renderer = new THREE.WebGLRenderer(renderParamters);
+			renderer = new THREE.WebGLRenderer(renderParameters);
 			renderer.setPixelRatio(window.devicePixelRatio);
 			renderer.setSize(width ?? window.innerWidth, height ?? window.innerHeight);
 			renderer.setAnimationLoop(() => {
-				if (!!scene && !!renderer && !!program) {
+				if (!!program && !!renderer) {
 					program.onUpdate();
-					renderer.render(scene, program.getCamera());
+					program.onDraw(renderer);
 				}
 			});
 			container.replaceChildren(renderer.domElement);
@@ -83,6 +96,7 @@ function useThreeRenderer<T extends ThreeBase>(
 		}
 
 		return () => {
+			console.log("useThreeRenderer: unmount");
 			if (!!gui) {
 				gui.destroy();
 				gui = null;
@@ -91,14 +105,14 @@ function useThreeRenderer<T extends ThreeBase>(
 				renderer.dispose();
 				renderer = null;
 			}
-			if (!!scene) {
-				scene = scene.clear();
-				scene = null;
-			}
+			program = null;
 		};
 	}, []);
 
-	return ThreeRenderer;
+	return {
+		ThreeRenderer,
+		program: program!,
+	};
 }
 
 export { useThreeRenderer };

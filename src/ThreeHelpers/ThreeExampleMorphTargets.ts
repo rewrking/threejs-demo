@@ -7,7 +7,7 @@ import { ThreeBase } from "./ThreeBase";
 
 // https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/webgl_morphtargets.html
 
-class MorphTargets extends ThreeBase {
+class ThreeExampleMorphTargets extends ThreeBase {
 	mesh: THREE.Mesh;
 	material: THREE.MeshPhongMaterial;
 	camera: THREE.PerspectiveCamera;
@@ -42,19 +42,13 @@ class MorphTargets extends ThreeBase {
 
 	onMakeGui = (gui: dat.GUI): void => {
 		const folder = gui.addFolder("Morph Targets");
-		folder
-			.add(this.guiParams, "Spherify", 0, 1)
-			.step(0.01)
-			.onChange((value: number) => {
-				this.mesh.morphTargetInfluences![0] = value;
-			});
+		folder.add(this.guiParams, "Spherify", 0, 1, 0.01).onChange((value: number) => {
+			this.mesh.morphTargetInfluences![0] = value;
+		});
 
-		folder
-			.add(this.guiParams, "Twist", 0, 1)
-			.step(0.01)
-			.onChange((value: number) => {
-				this.mesh.morphTargetInfluences![1] = value;
-			});
+		folder.add(this.guiParams, "Twist", 0, 1, 0.01).onChange((value: number) => {
+			this.mesh.morphTargetInfluences![1] = value;
+		});
 
 		folder.open();
 	};
@@ -69,9 +63,9 @@ class MorphTargets extends ThreeBase {
 		}
 	}
 
-	onWindowResize = (): void => {
+	onWindowResize = (width: number, height: number): void => {
 		if (!!this.camera) {
-			this.camera.aspect = window.innerWidth / window.innerHeight;
+			this.camera.aspect = width / height;
 			this.camera.updateProjectionMatrix();
 		}
 	};
@@ -129,4 +123,4 @@ class MorphTargets extends ThreeBase {
 	};
 }
 
-export { MorphTargets };
+export { ThreeExampleMorphTargets };
