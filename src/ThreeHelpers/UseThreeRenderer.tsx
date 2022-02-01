@@ -1,5 +1,6 @@
 import * as dat from "dat.gui";
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
+import styled from "styled-components";
 import * as THREE from "three";
 
 import { ClassType, Optional } from "@andrew-r-king/react-kitchen";
@@ -8,11 +9,16 @@ import { useResize } from "Hooks";
 
 import { ThreeBase } from "./ThreeBase";
 
-export type OutProps<T extends ThreeBase> = {
-	program: Optional<T>;
-	ref: RefObject<HTMLDivElement>;
-	error: Optional<Error>;
+const ThreeRenderer = () => {
+	return <Styles id="three-renderer"></Styles>;
 };
+
+const Styles = styled.div`
+	display: block;
+	background: #181132;
+	width: 100%;
+	height: 100%;
+`;
 
 export type RenderSettings = THREE.WebGLRendererParameters & {
 	width?: number;
@@ -28,19 +34,23 @@ function useThreeRenderer<T extends ThreeBase>(
 	settings: RenderSettings = {
 		antialias: true,
 	}
-): OutProps<T> {
-	const ref = useRef<HTMLDivElement>(null);
+): typeof ThreeRenderer {
 	const [error, setError] = useState<Optional<Error>>(null);
 	let [program] = useState<Optional<T>>(null);
 
-	/*useResize(() => {
-		if (!!renderer && !!program) {
-			program.onWindowResize(renderer);
-		}
-	}, [program]);*/
+	useResize(
+		(ev) => {
+			if (!!renderer && !!program) {
+				program.onWindowResize?.();
+				renderer.setSize(window.innerWidth, window.innerHeight);
+			}
+		},
+		[program]
+	);
 
 	useEffect(() => {
-		if (!!ref.current && scene === null) {
+		const container = document.getElementById("three-renderer");
+		if (!!container && scene === null) {
 			scene = new THREE.Scene();
 
 			const { width, height, ...renderParamters } = settings;
@@ -55,7 +65,7 @@ function useThreeRenderer<T extends ThreeBase>(
 					program.onFrame(scene, renderer);
 				}
 			});
-			ref.current.replaceChildren(renderer.domElement);
+			container.replaceChildren(renderer.domElement);
 
 			if (!!program.onMakeGui) {
 				const { GUI } = require("dat.gui");
@@ -85,13 +95,9 @@ function useThreeRenderer<T extends ThreeBase>(
 				scene = null;
 			}
 		};
-	}, [ref.current]);
+	}, []);
 
-	return {
-		ref,
-		program,
-		error,
-	};
+	return ThreeRenderer;
 }
 
 export { useThreeRenderer };

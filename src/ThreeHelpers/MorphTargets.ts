@@ -66,14 +66,12 @@ class MorphTargets extends ThreeBase {
 		}
 	}
 
-	onWindowResize(renderer: THREE.Renderer): void {
+	onWindowResize = (): void => {
 		if (!!this.camera) {
 			this.camera.aspect = window.innerWidth / window.innerHeight;
 			this.camera.updateProjectionMatrix();
-
-			renderer.setSize(window.innerWidth, window.innerHeight);
 		}
-	}
+	};
 
 	onCreateControls(element: HTMLElement): void {
 		if (!!this.camera) {

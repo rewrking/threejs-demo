@@ -4,10 +4,10 @@ const useResize = (inCallback: (ev: UIEvent) => void, dependencies: React.Depend
 	const callback = useCallback(inCallback, dependencies);
 
 	useEffect(() => {
-		document.addEventListener("resize", callback, false);
+		window.addEventListener("resize", callback, false);
 
 		return () => {
-			document.removeEventListener("resize", callback, false);
+			window.removeEventListener("resize", callback, false);
 		};
 	}, [callback]);
 

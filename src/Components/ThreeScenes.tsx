@@ -75,8 +75,8 @@ const ThreeSceneStars = ({ camera }: Props) => {
 const ThreeSceneMorphTargets = () => {
 	const { theme } = useUiStore();
 
-	let { ref } = useThreeRenderer(MorphTargets);
-	return <Styles ref={ref}></Styles>;
+	const ThreeRenderer = useThreeRenderer(MorphTargets);
+	return <ThreeRenderer />;
 };
 
 const ThreeSceneRouter = (props: Props) => {
