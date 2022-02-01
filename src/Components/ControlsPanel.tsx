@@ -65,6 +65,7 @@ const Styles = styled.div`
 		transition: background-color 0.125s linear;
 		border-radius: 0.25rem;
 		cursor: pointer;
+		user-select: none;
 
 		&.active {
 			border-color: ${getCssVariable("primaryColor")};

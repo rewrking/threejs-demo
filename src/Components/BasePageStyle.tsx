@@ -89,7 +89,7 @@ const datGuiCss = css`
 		display: none;
 	}
 	.dg .cr.boolean {
-		border-left-color: #806787 !important;
+		border-left-color: ${getCssVariable("primaryColor")} !important;
 	}
 	.dg .cr.function {
 		border-left-color: #e61d5f !important;
