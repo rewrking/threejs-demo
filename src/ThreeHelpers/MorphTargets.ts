@@ -61,6 +61,7 @@ class MorphTargets extends ThreeBase {
 
 	onFrame(scene: THREE.Scene, renderer: THREE.Renderer): void {
 		if (!!this.camera) {
+			this.controls?.update();
 			renderer.render(scene, this.camera);
 		}
 	}
@@ -77,7 +78,8 @@ class MorphTargets extends ThreeBase {
 	onCreateControls(element: HTMLElement): void {
 		if (!!this.camera) {
 			this.controls = new OrbitControls(this.camera, element);
-			this.controls.enableZoom = false;
+			this.controls.enableZoom = true;
+			this.controls.enableDamping = true;
 		}
 	}
 

@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { Physics } from "@react-three/cannon";
 import { OrbitControls, Stars } from "@react-three/drei";
-import { Canvas, useLoader } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { StoreProps as FiberStoreProps } from "@react-three/fiber/dist/declarations/src/core/store";
 
 import { useUiStore } from "Stores";

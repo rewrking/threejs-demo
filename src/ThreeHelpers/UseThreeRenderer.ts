@@ -72,9 +72,18 @@ function useThreeRenderer<T extends ThreeBase>(
 		}
 
 		return () => {
-			scene = null;
-			renderer = null;
-			// gui = null;
+			if (!!gui) {
+				gui.destroy();
+				gui = null;
+			}
+			if (!!renderer) {
+				renderer.dispose();
+				renderer = null;
+			}
+			if (!!scene) {
+				scene = scene.clear();
+				scene = null;
+			}
 		};
 	}, [ref.current]);
 

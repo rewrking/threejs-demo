@@ -39,6 +39,7 @@ class UiState extends BaseState {
 	setTheme = (theme: Theme) => {
 		this.themeId = theme;
 		LocalStorage.set(STORAGE_KEY_THEME, this.themeId);
+
 		switch (theme) {
 			case Theme.Dark:
 				return this.setThemeInternal(darkTheme);
