@@ -3,7 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 import { Optional } from "@andrew-r-king/react-kitchen";
 
-import { ThreeBase } from "./ThreeBase";
+import { ThreeBase, ThreeScene } from "./ThreeBase";
 
 // https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/webgl_morphtargets.html
 
@@ -18,10 +18,10 @@ class ThreeExampleMorphTargets extends ThreeBase {
 
 	controls: Optional<OrbitControls> = null;
 
-	constructor(scene: THREE.Scene) {
+	constructor(scene: ThreeScene) {
 		super(scene);
 
-		this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 20);
+		this.camera = new THREE.PerspectiveCamera(45, scene.width / scene.height, 1, 20);
 		this.camera.position.z = 10;
 		scene.add(this.camera);
 

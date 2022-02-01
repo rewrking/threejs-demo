@@ -52,8 +52,9 @@ function useThreeRenderer<T extends ThreeBase>(
 	useResize(
 		debounce((ev) => {
 			console.log("useThreeRenderer: resize");
-			if (!!renderer && !!program) {
-				program.onWindowResize?.(window.innerWidth, window.innerHeight);
+			const { width, height } = settings;
+			if (!!renderer && !!program && !width && !height) {
+				program.setSize?.(window.innerWidth, window.innerHeight);
 				renderer.setSize(window.innerWidth, window.innerHeight);
 			}
 		}, 500),
@@ -64,15 +65,17 @@ function useThreeRenderer<T extends ThreeBase>(
 		console.log("useThreeRenderer: create scene");
 		const container = document.getElementById(THREE_RENDERER_ID);
 		if (!!container) {
-			let scene = new THREE.Scene();
+			let scene: any = new THREE.Scene();
 
 			const { width, height, ...renderParameters } = settings;
+			scene.width = width ?? window.innerWidth;
+			scene.height = height ?? window.innerHeight;
 
-			program = new ProgramConstructor(scene);
+			program = new ProgramConstructor(scene, scene.width, scene.height);
 
 			renderer = new THREE.WebGLRenderer(renderParameters);
 			renderer.setPixelRatio(window.devicePixelRatio);
-			renderer.setSize(width ?? window.innerWidth, height ?? window.innerHeight);
+			renderer.setSize(scene.width, scene.height);
 			renderer.setAnimationLoop(() => {
 				if (!!program && !!renderer) {
 					program.onUpdate();
