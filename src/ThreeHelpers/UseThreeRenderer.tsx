@@ -1,6 +1,7 @@
 import * as dat from "dat.gui";
 import debounce from "lodash/debounce";
-import { useEffect, useState } from "react";
+import { RefObject, useCallback, useEffect, useRef, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import * as THREE from "three";
 
@@ -9,12 +10,6 @@ import { ClassType, Optional } from "@andrew-r-king/react-kitchen";
 import { useResize } from "Hooks";
 
 import { ThreeBase } from "./ThreeBase";
-
-const THREE_RENDERER_ID: string = "three-renderer";
-
-const ThreeRenderer = () => {
-	return <RendererStyles id={THREE_RENDERER_ID} />;
-};
 
 const RendererStyles = styled.div`
 	display: block;
@@ -29,7 +24,7 @@ export type RenderSettings = THREE.WebGLRendererParameters & {
 };
 
 export type ThreeRendererResult<T extends ThreeBase> = {
-	ThreeRenderer: typeof ThreeRenderer;
+	ThreeRenderer: React.FunctionComponent<{}>;
 	program: T;
 };
 
@@ -47,11 +42,8 @@ function useThreeRenderer<T extends ThreeBase>(
 	let [program] = useState<Optional<T>>(null);
 	let [gui] = useState<Optional<dat.GUI>>(null);
 
-	console.log("useThreeRenderer: render");
-
 	useResize(
 		debounce((ev) => {
-			console.log("useThreeRenderer: resize");
 			const { width, height } = settings;
 			if (!!renderer && !!program && !width && !height) {
 				program.setSize?.(window.innerWidth, window.innerHeight);
@@ -61,17 +53,30 @@ function useThreeRenderer<T extends ThreeBase>(
 		[program]
 	);
 
-	useEffect(() => {
-		console.log("useThreeRenderer: create scene");
-		const container = document.getElementById(THREE_RENDERER_ID);
-		if (!!container) {
+	const ref = useCallback((node: Optional<HTMLDivElement>) => {
+		console.log("ref called");
+		if (!!program) {
+			console.log("destroy");
+			if (!!gui) {
+				gui.destroy();
+				gui = null;
+			}
+			program = null;
+			if (!!renderer) {
+				renderer.dispose();
+				renderer = null;
+			}
+		}
+
+		if (!!node) {
+			console.log("create");
 			let scene: any = new THREE.Scene();
 
 			const { width, height, ...renderParameters } = settings;
 			scene.width = width ?? window.innerWidth;
 			scene.height = height ?? window.innerHeight;
 
-			program = new ProgramConstructor(scene, scene.width, scene.height);
+			program = new ProgramConstructor(scene);
 
 			renderer = new THREE.WebGLRenderer(renderParameters);
 			renderer.setPixelRatio(window.devicePixelRatio);
@@ -82,7 +87,7 @@ function useThreeRenderer<T extends ThreeBase>(
 					program.onDraw(renderer);
 				}
 			});
-			container.replaceChildren(renderer.domElement);
+			node.replaceChildren(renderer.domElement);
 
 			if (!!program.onMakeGui) {
 				const { GUI } = require("dat.gui");
@@ -95,22 +100,10 @@ function useThreeRenderer<T extends ThreeBase>(
 			}
 
 			program.onCreateControls(renderer.domElement);
-			// setProgram(newProgram);
 		}
-
-		return () => {
-			console.log("useThreeRenderer: unmount");
-			if (!!gui) {
-				gui.destroy();
-				gui = null;
-			}
-			if (!!renderer) {
-				renderer.dispose();
-				renderer = null;
-			}
-			program = null;
-		};
 	}, []);
+
+	const ThreeRenderer = useCallback(() => <RendererStyles ref={ref} />, [ref]);
 
 	return {
 		ThreeRenderer,

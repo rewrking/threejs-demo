@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 // import { Physics } from "@react-three/cannon";
@@ -74,7 +74,17 @@ const ThreeSceneMorphTargets = () => {
 	const { theme } = useUiStore();
 
 	const { ThreeRenderer } = useThreeRenderer(ThreeExampleMorphTargets);
+
 	return <ThreeRenderer />;
+};
+
+const ThreeSceneMorphTargets2 = () => {
+	const { theme } = useUiStore();
+
+	// const { ThreeRenderer } = useThreeRenderer(ThreeExampleMorphTargets);
+
+	// return <ThreeRenderer />;
+	return <div />;
 };
 
 const ThreeSceneRouter = (/*props: Props*/) => {
@@ -87,7 +97,7 @@ const ThreeSceneRouter = (/*props: Props*/) => {
 		case ThreeScene.MorphTargets:
 			return <ThreeSceneMorphTargets />;
 		default:
-			return <ThreeSceneMorphTargets />;
+			return <ThreeSceneMorphTargets2 />;
 	}
 };
 

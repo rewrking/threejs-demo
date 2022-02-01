@@ -73,7 +73,7 @@ class ThreeExampleMorphTargets extends ThreeBase {
 	onCreateControls(element: HTMLElement): void {
 		if (!!this.camera) {
 			this.controls = new OrbitControls(this.camera, element);
-			this.controls.enableZoom = true;
+			this.controls.enableZoom = false;
 			this.controls.enableDamping = true;
 		}
 	}
