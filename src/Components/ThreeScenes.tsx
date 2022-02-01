@@ -6,6 +6,7 @@ import styled from "styled-components";
 // import { Canvas } from "@react-three/fiber";
 // import { StoreProps as FiberStoreProps } from "@react-three/fiber/dist/declarations/src/core/store";
 import { useUiStore } from "Stores";
+import { getCssVariable } from "Theme";
 import { ThreeExampleMorphTargets } from "ThreeHelpers/ThreeExampleMorphTargets";
 import { useThreeRenderer } from "ThreeHelpers/UseThreeRenderer";
 import { ThreeScene } from "Types";
@@ -84,7 +85,7 @@ const ThreeSceneMorphTargets2 = () => {
 	// const { ThreeRenderer } = useThreeRenderer(ThreeExampleMorphTargets);
 
 	// return <ThreeRenderer />;
-	return <div />;
+	return <NoScene />;
 };
 
 const ThreeSceneRouter = (/*props: Props*/) => {
@@ -96,14 +97,15 @@ const ThreeSceneRouter = (/*props: Props*/) => {
 		// 	return <ThreeSceneBox camera={{ position: [-3, 2, 5] }} {...props} />;
 		case ThreeScene.MorphTargets:
 			return <ThreeSceneMorphTargets />;
+		case ThreeScene.None:
 		default:
 			return <ThreeSceneMorphTargets2 />;
 	}
 };
 
-const Styles = styled.div`
+const NoScene = styled.div`
 	display: block;
-	background: #181132;
+	background: #323252;
 	width: 100vw;
 	height: 100vh;
 `;

@@ -13,7 +13,7 @@ class UiState extends BaseState {
 	themeId: Theme = Theme.Dark;
 	theme: ThemeType = darkTheme;
 
-	scene: ThreeScene = ThreeScene.Box;
+	scene: ThreeScene = ThreeScene.None;
 
 	@Action
 	initialize = () => {
@@ -26,7 +26,7 @@ class UiState extends BaseState {
 
 		this.setTheme(LocalStorage.get<Theme>(STORAGE_KEY_THEME, themeId));
 
-		let scene: ThreeScene = ThreeScene.Box;
+		let scene: ThreeScene = ThreeScene.None;
 		this.setScene(LocalStorage.get<ThreeScene>(STORAGE_KEY_SCENE, scene));
 		this.initialized = true;
 	};

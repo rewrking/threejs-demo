@@ -32,7 +32,7 @@ const ControlsPanel = () => {
 					setTheme(themeId === Theme.Light ? Theme.Dark : Theme.Light);
 				}}
 			>
-				Theme
+				Theme: {themeId === Theme.Light ? "☀️" : "🌙"}
 			</button>
 		</Styles>
 	);
@@ -58,9 +58,10 @@ const Styles = styled.div`
 
 	> button {
 		background-color: transparent;
+		font-size: 1rem;
 		color: ${getCssVariable("mainText")};
 		border: 0.0675rem solid transparent;
-		padding: 0.5rem 1rem;
+		padding: 0.25rem 0.75rem;
 		transition: background-color 0.125s linear;
 		border-radius: 0.25rem;
 		cursor: pointer;
