@@ -33,20 +33,14 @@ function useThreeRenderer<T extends ThreeBase>(
 	const [error, setError] = useState<Optional<Error>>(null);
 	let [program] = useState<Optional<T>>(null);
 
-	useResize(() => {
+	/*useResize(() => {
 		if (!!renderer && !!program) {
 			program.onWindowResize(renderer);
 		}
-	}, [program]);
-
-	const onSetAnimationFrame = useCallback(() => {
-		if (!!scene && !!renderer && program) {
-			program.onFrame(scene, renderer);
-		}
-	}, [scene, program, renderer]);
+	}, [program]);*/
 
 	useEffect(() => {
-		if (!!ref.current && scene === null && !!window) {
+		if (!!ref.current && scene === null) {
 			scene = new THREE.Scene();
 
 			const { width, height, ...renderParamters } = settings;
@@ -56,14 +50,20 @@ function useThreeRenderer<T extends ThreeBase>(
 			renderer = new THREE.WebGLRenderer(renderParamters);
 			renderer.setPixelRatio(window.devicePixelRatio);
 			renderer.setSize(width ?? window.innerWidth, height ?? window.innerHeight);
-			renderer.setAnimationLoop(onSetAnimationFrame);
-			ref.current.appendChild(renderer.domElement);
+			renderer.setAnimationLoop(() => {
+				if (!!scene && !!renderer && program) {
+					program.onFrame(scene, renderer);
+				}
+			});
+			ref.current.replaceChildren(renderer.domElement);
 
 			if (!!program.onMakeGui) {
 				const { GUI } = require("dat.gui");
-				gui = new GUI();
-				if (!!gui) {
-					program.onMakeGui(gui);
+				if (gui === null) {
+					gui = new GUI();
+					if (!!gui) {
+						program.onMakeGui(gui);
+					}
 				}
 			}
 
@@ -72,13 +72,11 @@ function useThreeRenderer<T extends ThreeBase>(
 		}
 
 		return () => {
-			if (!ref.current) {
-				scene = null;
-				renderer = null;
-				gui = null;
-			}
+			scene = null;
+			renderer = null;
+			// gui = null;
 		};
-	}, [ref.current, window]);
+	}, [ref.current]);
 
 	return {
 		ref,
