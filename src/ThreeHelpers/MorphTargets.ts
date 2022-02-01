@@ -25,13 +25,13 @@ class MorphTargets extends ThreeBase {
 		this.camera.position.z = 10;
 		scene.add(this.camera);
 
-		scene.add(new THREE.AmbientLight(0x8fbcd4, 0.4));
+		scene.add(new THREE.AmbientLight("#8fbcd4", 0.4));
 
-		const pointLight = new THREE.PointLight(0xffffff, 1);
+		const pointLight = new THREE.PointLight("#ffffff", 1);
 		this.camera.add(pointLight);
 
 		this.material = new THREE.MeshPhongMaterial({
-			color: 0xff0000,
+			color: "#00ff33",
 			flatShading: true,
 		});
 
@@ -59,10 +59,13 @@ class MorphTargets extends ThreeBase {
 		folder.open();
 	};
 
-	onFrame(scene: THREE.Scene, renderer: THREE.Renderer): void {
+	public getCamera(): THREE.Camera {
+		return this.camera;
+	}
+
+	onUpdate(): void {
 		if (!!this.camera) {
 			this.controls?.update();
-			renderer.render(scene, this.camera);
 		}
 	}
 
@@ -81,7 +84,7 @@ class MorphTargets extends ThreeBase {
 		}
 	}
 
-	private createGeometry = () => {
+	private createGeometry = (): THREE.BoxGeometry => {
 		const geometry = new THREE.BoxGeometry(2, 2, 2, 32, 32, 32);
 
 		// create an empty array to  hold targets for the attribute we want to morph

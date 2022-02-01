@@ -61,8 +61,9 @@ function useThreeRenderer<T extends ThreeBase>(
 			renderer.setPixelRatio(window.devicePixelRatio);
 			renderer.setSize(width ?? window.innerWidth, height ?? window.innerHeight);
 			renderer.setAnimationLoop(() => {
-				if (!!scene && !!renderer && program) {
-					program.onFrame(scene, renderer);
+				if (!!scene && !!renderer && !!program) {
+					program.onUpdate();
+					renderer.render(scene, program.getCamera());
 				}
 			});
 			container.replaceChildren(renderer.domElement);
