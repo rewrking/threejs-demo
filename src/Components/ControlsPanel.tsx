@@ -44,8 +44,8 @@ const Styles = styled.div`
 	display: flex;
 	flex-direction: column;
 	position: absolute;
-	left: 2rem;
-	top: 2rem;
+	left: 1rem;
+	top: 1rem;
 	right: auto;
 	bottom: auto;
 	background-color: ${getCssVariable("background")};

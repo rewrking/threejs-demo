@@ -3,7 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 import { Optional } from "@andrew-r-king/react-kitchen";
 
-import { ThreeBase, ThreeScene } from "./ThreeBase";
+import { ThreeBase, ThreeSceneOptions } from "./ThreeBase";
 
 // https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/webgl_morphtargets.html
 
@@ -18,10 +18,10 @@ class ThreeExampleMorphTargets extends ThreeBase {
 
 	controls: Optional<OrbitControls> = null;
 
-	constructor(scene: ThreeScene) {
-		super(scene);
+	constructor(scene: THREE.Scene, public options: ThreeSceneOptions) {
+		super(scene, options);
 
-		this.camera = new THREE.PerspectiveCamera(45, scene.width / scene.height, 1, 20);
+		this.camera = new THREE.PerspectiveCamera(45, options.width / options.height, 1, 20);
 		this.camera.position.z = 10;
 		scene.add(this.camera);
 
@@ -58,24 +58,18 @@ class ThreeExampleMorphTargets extends ThreeBase {
 	}
 
 	onUpdate(): void {
-		if (!!this.camera) {
-			this.controls?.update();
-		}
+		this.controls?.update();
 	}
 
 	onWindowResize = (width: number, height: number): void => {
-		if (!!this.camera) {
-			this.camera.aspect = width / height;
-			this.camera.updateProjectionMatrix();
-		}
+		this.camera.aspect = width / height;
+		this.camera.updateProjectionMatrix();
 	};
 
 	onCreateControls(element: HTMLElement): void {
-		if (!!this.camera) {
-			this.controls = new OrbitControls(this.camera, element);
-			this.controls.enableZoom = true;
-			this.controls.enableDamping = true;
-		}
+		this.controls = new OrbitControls(this.camera, element);
+		this.controls.enableZoom = true;
+		this.controls.enableDamping = true;
 	}
 
 	private createGeometry = (): THREE.BoxGeometry => {

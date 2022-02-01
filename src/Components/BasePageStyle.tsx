@@ -78,6 +78,16 @@ const cssReset = css`
 `;
 
 const datGuiCss = css`
+	.dg.ac {
+		top: 1rem !important;
+		right: 1rem !important;
+	}
+	.dg.main.a {
+		margin-right: 0 !important;
+	}
+	.dg .close-button {
+		display: none;
+	}
 	.dg .cr.boolean {
 		border-left-color: #806787 !important;
 	}
@@ -88,7 +98,7 @@ const datGuiCss = css`
 		border-left-color: ${getCssVariable("primaryColor")} !important;
 	}
 	.dg .cr.number input[type="text"] {
-		color: ${getCssVariable("primaryColor")} !important;
+		color: #fff !important;
 	}
 	.dg .cr.string {
 		border-left-color: #1ed36f !important;
@@ -106,6 +116,15 @@ const datGuiCss = css`
 	/* dat.GUI fixes */
 	div.dg input {
 		font: 0.625rem "Lucida Grande", sans-serif !important;
+	}
+`;
+
+const threeStatsCss = css`
+	.three-stats {
+		position: absolute !important;
+		top: 1rem !important;
+		left: 50% !important;
+		margin-left: -40px;
 	}
 `;
 
@@ -166,6 +185,7 @@ const BaseStyle = createGlobalStyle`
 
 
 	${datGuiCss}
+	${threeStatsCss}
 `;
 
 export { BaseStyle, styleVariables };

@@ -6,9 +6,8 @@ import styled from "styled-components";
 // import { Canvas } from "@react-three/fiber";
 // import { StoreProps as FiberStoreProps } from "@react-three/fiber/dist/declarations/src/core/store";
 import { useUiStore } from "Stores";
-import { getCssVariable } from "Theme";
-import { ThreeExampleMorphTargets } from "ThreeHelpers/ThreeExampleMorphTargets";
-import { useThreeRenderer } from "ThreeHelpers/UseThreeRenderer";
+// import { getCssVariable } from "Theme";
+import { useThreeRenderer, ThreeExampleMorphTargets, ThreeExampleAnimationKeyframes } from "ThreeHelpers";
 import { ThreeScene } from "Types";
 
 // import { BoxMeshPhysics, PlaneMeshPhysics, SphereMesh } from "./Three";
@@ -79,13 +78,11 @@ const ThreeSceneMorphTargets = () => {
 	return <ThreeRenderer />;
 };
 
-const ThreeSceneMorphTargets2 = () => {
+const ThreeScenenAnimationKeyframes = () => {
 	const { theme } = useUiStore();
 
-	// const { ThreeRenderer } = useThreeRenderer(ThreeExampleMorphTargets);
-
-	// return <ThreeRenderer />;
-	return <NoScene />;
+	const { ThreeRenderer } = useThreeRenderer(ThreeExampleAnimationKeyframes);
+	return <ThreeRenderer />;
 };
 
 const ThreeSceneRouter = (/*props: Props*/) => {
@@ -97,9 +94,11 @@ const ThreeSceneRouter = (/*props: Props*/) => {
 		// 	return <ThreeSceneBox camera={{ position: [-3, 2, 5] }} {...props} />;
 		case ThreeScene.MorphTargets:
 			return <ThreeSceneMorphTargets />;
+		case ThreeScene.AnimationKeyframes:
+			return <ThreeScenenAnimationKeyframes />;
 		case ThreeScene.None:
 		default:
-			return <ThreeSceneMorphTargets2 />;
+			return <NoScene />;
 	}
 };
 
