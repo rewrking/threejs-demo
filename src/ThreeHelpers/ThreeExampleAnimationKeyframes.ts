@@ -15,6 +15,7 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 	mixer: Optional<THREE.AnimationMixer> = null;
 	guiParams = {
 		Frame: 0,
+		Speed: 1,
 		Play: true,
 	};
 
@@ -64,9 +65,7 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 	};
 
 	private tempPlay: Optional<boolean> = null;
-
 	private metaData: Optional<any> = null;
-
 	private frameController: Optional<dat.GUIController> = null;
 	private changingFrameValue: boolean = false;
 	private onLoadGLTF = (gltf: GLTF) => {
@@ -118,6 +117,13 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 					}
 				})
 				.listen();
+
+			this.animationAction.setEffectiveTimeScale(this.guiParams.Speed);
+			this.frameController = folder.add(this.guiParams, "Speed", -10, 10, 0.01).onChange((value: number) => {
+				if (!!this.animationAction) {
+					this.animationAction.setEffectiveTimeScale(value);
+				}
+			});
 
 			folder.add(this.guiParams, "Play").onChange(this.playAnimation);
 

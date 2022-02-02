@@ -23,6 +23,7 @@ class ThreeExampleMorphTargetFace extends ThreeBase {
 	mixer: Optional<THREE.AnimationMixer> = null;
 	guiParams = {
 		Frame: 0,
+		Speed: 1,
 		Play: true,
 	};
 
@@ -87,7 +88,9 @@ class ThreeExampleMorphTargetFace extends ThreeBase {
 		this.scene.add(mesh);
 
 		this.mixer = new THREE.AnimationMixer(mesh);
+
 		this.animationAction = this.mixer.clipAction(gltf.animations[0]);
+		this.animationAction.setLoop(THREE.LoopPingPong, Infinity);
 
 		if (!!this.gui) {
 			if (!!this.metaData) {
@@ -123,14 +126,22 @@ class ThreeExampleMorphTargetFace extends ThreeBase {
 				})
 				.listen();
 
+			this.animationAction.setEffectiveTimeScale(this.guiParams.Speed);
+			this.frameController = folder.add(this.guiParams, "Speed", -10, 10, 0.01).onChange((value: number) => {
+				if (!!this.animationAction) {
+					this.animationAction.setEffectiveTimeScale(value);
+				}
+			});
+
 			folder.add(this.guiParams, "Play").onChange(this.playAnimation);
+			folder.open();
 
 			const head: MorphableObject = mesh.getObjectByName("mesh_2");
-			if (!!head) {
+			if (!!head && !!head.morphTargetDictionary && !!head.morphTargetInfluences) {
 				const morphs = this.gui.addFolder("Morph Targets");
-				for (const [key, value] of Object.entries(head.morphTargetDictionary ?? {})) {
+				for (const [key, value] of Object.entries(head.morphTargetDictionary)) {
 					morphs
-						.add(head.morphTargetInfluences ?? {}, value as any, 0, 1, 0.01)
+						.add(head.morphTargetInfluences, value, 0, 1, 0.01)
 						.name(key.replace("blendShape1.", ""))
 						.listen();
 				}
