@@ -98,7 +98,6 @@ function useThreeRenderer<T extends ThreeBase>(
 					stats.update();
 				}
 			});
-			program.onCreateRenderer?.(renderer);
 
 			node.replaceChildren(renderer.domElement);
 
@@ -112,6 +111,7 @@ function useThreeRenderer<T extends ThreeBase>(
 				}
 			}
 
+			program.onCreateRenderer?.(renderer);
 			program.onCreateControls(renderer.domElement);
 
 			if (showStats) {

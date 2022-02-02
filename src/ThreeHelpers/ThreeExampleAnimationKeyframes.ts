@@ -4,11 +4,9 @@ import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
-import { Optional } from "@andrew-r-king/react-kitchen";
+import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
 
 import { ThreeBase, ThreeSceneOptions } from "./ThreeBase";
-
-// https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/webgl_morphtargets.html
 
 class ThreeExampleAnimationKeyframes extends ThreeBase {
 	clock: THREE.Clock;
@@ -23,10 +21,8 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 	controls: Optional<OrbitControls> = null;
 
 	dracoLoader: Optional<DRACOLoader> = null;
-
 	animationAction: Optional<THREE.AnimationAction> = null;
-
-	keyframesFolder: Optional<dat.GUI> = null;
+	gui: Optional<dat.GUI> = null;
 
 	constructor(scene: THREE.Scene, public options: ThreeSceneOptions) {
 		super(scene, options);
@@ -69,40 +65,58 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 
 	private tempPlay: Optional<boolean> = null;
 
+	private metaData: Optional<any> = {};
+
+	private frameController: Optional<dat.GUIController> = null;
+	private changingFrameValue: boolean = false;
 	private onLoadGLTF = (gltf: GLTF) => {
-		const model = gltf.scene;
+		this.metaData = gltf.asset.extras ?? {};
+
+		const model: THREE.Group = gltf.scene;
 		model.position.set(1, 1, 0);
 		model.scale.set(0.01, 0.01, 0.01);
 		this.scene.add(model);
 
 		this.mixer = new THREE.AnimationMixer(model);
-		// gltf.animations[
 		this.animationAction = this.mixer.clipAction(gltf.animations[0]);
-		console.log(this.animationAction);
+		// this.animationAction.getClip().
 
-		if (!!this.keyframesFolder) {
-			this.keyframesFolder
+		if (!!this.gui) {
+			if (!!this.metaData) {
+				const meta = this.gui.addFolder("Metadata");
+				meta.add(this.metaData, "title");
+				meta.add(this.metaData, "author");
+				meta.add(this.metaData, "license");
+				meta.add(this.metaData, "source");
+			}
+
+			const folder = this.gui.addFolder("Animation Keyframes");
+			this.frameController = folder
 				.add(this.guiParams, "Frame", 0, this.animationAction.getClip().duration, 0.01)
 				.onChange((value: number) => {
-					if (this.tempPlay === null) {
-						this.tempPlay = this.guiParams.Play;
-					}
-					this.guiParams.Play = false;
-					if (!!this.animationAction) {
-						this.animationAction.time = value;
-						this.mixer?.update(0);
+					if (!this.changingFrameValue) {
+						if (this.tempPlay === null) {
+							this.tempPlay = this.guiParams.Play;
+						}
+						this.guiParams.Play = false;
+						if (!!this.animationAction) {
+							this.animationAction.time = value;
+							this.mixer?.update(0);
+						}
 					}
 				})
 				.onFinishChange((value: number) => {
-					if (this.tempPlay !== null) {
-						this.guiParams.Play = this.tempPlay;
-						this.tempPlay = null;
+					if (!this.changingFrameValue) {
+						if (this.tempPlay !== null) {
+							this.guiParams.Play = this.tempPlay;
+							this.tempPlay = null;
+						}
 					}
 				});
 
-			this.keyframesFolder.add(this.guiParams, "Play").onChange(this.playAnimation);
+			folder.add(this.guiParams, "Play").onChange(this.playAnimation);
 
-			this.keyframesFolder.open();
+			folder.open();
 		}
 
 		this.playAnimation(this.guiParams.Play);
@@ -114,7 +128,7 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 	};
 
 	onMakeGui = (gui: dat.GUI): void => {
-		this.keyframesFolder = gui.addFolder("Animation Keyframes");
+		this.gui = gui;
 	};
 
 	public getCamera(): THREE.Camera {
@@ -124,8 +138,14 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 	onUpdate(): void {
 		const delta = this.clock.getDelta();
 
-		if (this.guiParams.Play) {
-			this.mixer?.update(delta);
+		if (this.guiParams.Play && !!this.mixer) {
+			this.mixer.update(delta);
+
+			if (!!this.frameController && !!this.animationAction) {
+				this.changingFrameValue = true;
+				this.frameController.setValue(this.animationAction.time);
+				this.changingFrameValue = false;
+			}
 		}
 
 		this.controls?.update();
