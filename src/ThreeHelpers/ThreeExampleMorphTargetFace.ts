@@ -9,13 +9,6 @@ import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
 
 import { ThreeBase, ThreeSceneOptions } from "./ThreeBase";
 
-type MorphableObject =
-	| (THREE.Object3D<THREE.Event> & {
-			morphTargetInfluences?: Dictionary<any>;
-			morphTargetDictionary?: Dictionary<any>;
-	  })
-	| undefined;
-
 class ThreeExampleMorphTargetFace extends ThreeBase {
 	clock: THREE.Clock;
 	camera: THREE.PerspectiveCamera;
@@ -136,12 +129,12 @@ class ThreeExampleMorphTargetFace extends ThreeBase {
 			folder.add(this.guiParams, "Play").onChange(this.playAnimation);
 			folder.open();
 
-			const head: MorphableObject = mesh.getObjectByName("mesh_2");
+			const head = mesh.getObjectByName("mesh_2") as THREE.Mesh | undefined;
 			if (!!head && !!head.morphTargetDictionary && !!head.morphTargetInfluences) {
 				const morphs = this.gui.addFolder("Morph Targets");
 				for (const [key, value] of Object.entries(head.morphTargetDictionary)) {
 					morphs
-						.add(head.morphTargetInfluences, value, 0, 1, 0.01)
+						.add(head.morphTargetInfluences, value as any, 0, 1, 0.01)
 						.name(key.replace("blendShape1.", ""))
 						.listen();
 				}
