@@ -1,14 +1,22 @@
+import { MeshoptDecoder } from "meshoptimizer";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader";
 
 import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
 
 import { ThreeBase, ThreeSceneOptions } from "./ThreeBase";
 
-class ThreeExampleAnimationKeyframes extends ThreeBase {
+type MorphableObject =
+	| (THREE.Object3D<THREE.Event> & {
+			morphTargetInfluences?: Dictionary<any>;
+			morphTargetDictionary?: Dictionary<any>;
+	  })
+	| undefined;
+
+class ThreeExampleMorphTargetFace extends ThreeBase {
 	clock: THREE.Clock;
 	camera: THREE.PerspectiveCamera;
 	pmremGenerator: Optional<THREE.PMREMGenerator> = null;
@@ -20,41 +28,43 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 
 	controls: Optional<OrbitControls> = null;
 
-	dracoLoader: Optional<DRACOLoader> = null;
+	ktx2Loader: Optional<KTX2Loader> = null;
 	animationAction: Optional<THREE.AnimationAction> = null;
 	gui: Optional<dat.GUI> = null;
 
 	constructor(scene: THREE.Scene, public options: ThreeSceneOptions) {
 		super(scene, options);
 
-		this.camera = new THREE.PerspectiveCamera(40, options.width / options.height, 1, 100);
-		this.camera.position.set(5, 2, 8);
+		this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 20);
+		this.camera.position.set(-1.8, 0.8, 3);
 		// scene.add(this.camera);
 
-		scene.background = new THREE.Color(0xbfe3dd);
+		scene.background = new THREE.Color(0x00aacc);
 
 		this.clock = new THREE.Clock();
 	}
 
 	dispose = () => {
-		if (!!this.dracoLoader) {
-			this.dracoLoader.dispose();
-			this.dracoLoader = null;
+		if (!!this.ktx2Loader) {
+			this.ktx2Loader.dispose();
+			this.ktx2Loader = null;
 		}
 	};
 
 	onCreateRenderer = (renderer: THREE.WebGLRenderer) => {
+		renderer.toneMapping = THREE.ACESFilmicToneMapping;
 		renderer.outputEncoding = THREE.sRGBEncoding;
 		this.pmremGenerator = new THREE.PMREMGenerator(renderer);
-		this.scene.environment = this.pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+		this.scene.environment = this.pmremGenerator.fromScene(new RoomEnvironment()).texture;
 
-		this.dracoLoader = new DRACOLoader();
-		this.dracoLoader.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
+		this.ktx2Loader = new KTX2Loader()
+			.setTranscoderPath("https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/libs/basis/")
+			.detectSupport(renderer);
 
-		const loader = new GLTFLoader();
-		loader.setDRACOLoader(this.dracoLoader);
+		const loader = new GLTFLoader().setKTX2Loader(this.ktx2Loader).setMeshoptDecoder(MeshoptDecoder);
+
 		loader.load(
-			"https://cdn.rawgit.com/mrdoob/three.js/master/examples/models/gltf/LittlestTokyo.glb",
+			"https://cdn.rawgit.com/mrdoob/three.js/master/examples/models/gltf/facecap.glb",
 			this.onLoadGLTF,
 			undefined, // onProgress (send info to progress bar)
 			(err) => {
@@ -63,27 +73,21 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 		);
 	};
 
-	private tempPlay: Optional<boolean> = null;
-
 	private metaData: Optional<any> = null;
-
+	private tempPlay: Optional<boolean> = null;
 	private frameController: Optional<dat.GUIController> = null;
 	private changingFrameValue: boolean = false;
+
 	private onLoadGLTF = (gltf: GLTF) => {
 		this.metaData = gltf.asset.extras ?? null;
 
-		const group: THREE.Group = gltf.scene;
-		group.position.set(1, 1, 0);
-		group.scale.set(0.01, 0.01, 0.01);
-		this.scene.add(group);
+		const mesh = gltf.scene.children[0];
+		mesh.position.y += 0.5;
 
-		group.traverseVisible((object) => {
-			console.log(object.name);
-		});
+		this.scene.add(mesh);
 
-		this.mixer = new THREE.AnimationMixer(group);
+		this.mixer = new THREE.AnimationMixer(mesh);
 		this.animationAction = this.mixer.clipAction(gltf.animations[0]);
-		// this.animationAction.getClip().
 
 		if (!!this.gui) {
 			if (!!this.metaData) {
@@ -121,31 +125,23 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 
 			folder.add(this.guiParams, "Play").onChange(this.playAnimation);
 
-			const trolly = group.getObjectByName("Object675");
-			if (!!trolly) {
-				console.log(trolly);
-				const expressions = Object.keys(trolly?.["morphTargetDictionary"] ?? {});
-				console.log(expressions);
-				// const expressionFolder = gui.addFolder("Expressions");
-
-				// for (let i = 0; i < expressions.length; i++) {
-				// 	expressionFolder.add(face.morphTargetInfluences, i, 0, 1, 0.01).name(expressions[i]);
-				// }
-
-				const sceneFolder = this.gui.addFolder("Scene");
-				sceneFolder.add(trolly, "visible");
+			const head: MorphableObject = mesh.getObjectByName("mesh_2");
+			if (!!head) {
+				const morphs = this.gui.addFolder("Morph Targets");
+				for (const [key, value] of Object.entries(head.morphTargetDictionary ?? {})) {
+					morphs
+						.add(head.morphTargetInfluences ?? {}, value as any, 0, 1, 0.01)
+						.name(key.replace("blendShape1.", ""))
+						.listen();
+				}
 			}
-
 			const objFolder = this.gui.addFolder("Objects");
-			group.traverse((object) => {
+			mesh.traverse((object) => {
 				if (object.name.length === 0) return;
 
 				objFolder.add(object, "visible").name(object.name);
 			});
-
-			folder.open();
 		}
-
 		this.playAnimation(this.guiParams.Play);
 	};
 
@@ -192,4 +188,4 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 	}
 }
 
-export { ThreeExampleAnimationKeyframes };
+export { ThreeExampleMorphTargetFace };

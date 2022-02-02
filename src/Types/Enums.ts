@@ -4,4 +4,5 @@ export enum ThreeScene {
 	// Stars = "stars",
 	MorphTargets = "morph-targets",
 	AnimationKeyframes = "animation-keyframes",
+	MorphTargetFace = "morph-target-face",
 }

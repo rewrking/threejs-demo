@@ -117,6 +117,25 @@ const datGuiCss = css`
 	div.dg input {
 		font: 0.625rem "Lucida Grande", sans-serif !important;
 	}
+
+	li.cr .property-name {
+		width: 8rem !important;
+	}
+	li.cr .property-name + div {
+		width: calc(100% - 8rem) !important;
+	}
+
+	.dg .slider {
+		margin-left: 0 !important;
+	}
+
+	.dg .c input[type="checkbox"] {
+		margin-left: 0 !important;
+	}
+
+	.dg li.title {
+		margin-left: 0 !important;
+	}
 `;
 
 const threeStatsCss = css`
