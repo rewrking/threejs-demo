@@ -76,10 +76,6 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 		group.scale.set(0.01, 0.01, 0.01);
 		this.scene.add(group);
 
-		group.traverseVisible((object) => {
-			console.log(object.name);
-		});
-
 		this.mixer = new THREE.AnimationMixer(group);
 		this.animationAction = this.mixer.clipAction(gltf.animations[0]);
 		// this.animationAction.getClip().
@@ -129,9 +125,9 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 
 			const trolly = group.getObjectByName("Object675");
 			if (!!trolly) {
-				console.log(trolly);
-				const expressions = Object.keys(trolly?.["morphTargetDictionary"] ?? {});
-				console.log(expressions);
+				// console.log(trolly);
+				// const expressions = Object.keys(trolly?.["morphTargetDictionary"] ?? {});
+				// console.log(expressions);
 				// const expressionFolder = gui.addFolder("Expressions");
 
 				// for (let i = 0; i < expressions.length; i++) {

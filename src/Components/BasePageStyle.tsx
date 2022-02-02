@@ -120,6 +120,7 @@ const datGuiCss = css`
 
 	li.cr .property-name {
 		width: 8rem !important;
+		user-select: none;
 	}
 	li.cr .property-name + div {
 		width: calc(100% - 8rem) !important;
@@ -135,6 +136,7 @@ const datGuiCss = css`
 
 	.dg li.title {
 		margin-left: 0 !important;
+		user-select: none;
 	}
 `;
 
