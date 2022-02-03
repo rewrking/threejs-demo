@@ -89,7 +89,7 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 				meta.add(this.metaData, "source");
 			}
 
-			const folder = this.gui.addFolder("Animation Keyframes");
+			const folder = this.gui.addFolder("Parameters");
 			this.frameController = folder
 				.add(this.guiParams, "Frame", 0, this.animationAction.getClip().duration, 0.01)
 				.onChange((value: number) => {
@@ -114,8 +114,9 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 				})
 				.listen();
 
+			// this.animationAction.loop = THREE.LoopPingPong;
 			this.animationAction.setEffectiveTimeScale(this.guiParams.Speed);
-			this.frameController = folder.add(this.guiParams, "Speed", -10, 10, 0.01).onChange((value: number) => {
+			this.frameController = folder.add(this.guiParams, "Speed", -2.5, 2.5, 0.01).onChange((value: number) => {
 				if (!!this.animationAction) {
 					this.animationAction.setEffectiveTimeScale(value);
 				}
@@ -164,7 +165,7 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 		return this.camera;
 	}
 
-	onUpdate(): void {
+	onUpdate = (): void => {
 		const delta = this.clock.getDelta();
 
 		if (this.guiParams.Play && !!this.mixer) {
@@ -179,7 +180,7 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 		}
 
 		this.controls?.update();
-	}
+	};
 
 	onWindowResize = (width: number, height: number): void => {
 		this.camera.aspect = width / height;

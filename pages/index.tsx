@@ -2,8 +2,8 @@ import { NextPage } from "next";
 
 import { HomeLayout } from "Layouts";
 
-const Home: NextPage = () => {
+const Layout: NextPage = () => {
 	return <HomeLayout />;
 };
 
-export default Home;
+export default Layout;

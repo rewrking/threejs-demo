@@ -94,7 +94,7 @@ class ThreeExampleMorphTargetFace extends ThreeBase {
 				meta.add(this.metaData, "source");
 			}
 
-			const folder = this.gui.addFolder("Animation Keyframes");
+			const folder = this.gui.addFolder("Parameters");
 			this.frameController = folder
 				.add(this.guiParams, "Frame", 0, this.animationAction.getClip().duration, 0.01)
 				.onChange((value: number) => {
@@ -162,7 +162,7 @@ class ThreeExampleMorphTargetFace extends ThreeBase {
 		return this.camera;
 	}
 
-	onUpdate(): void {
+	onUpdate = (): void => {
 		const delta = this.clock.getDelta();
 
 		if (this.guiParams.Play && !!this.mixer) {
@@ -177,7 +177,7 @@ class ThreeExampleMorphTargetFace extends ThreeBase {
 		}
 
 		this.controls?.update();
-	}
+	};
 
 	onWindowResize = (width: number, height: number): void => {
 		this.camera.aspect = width / height;

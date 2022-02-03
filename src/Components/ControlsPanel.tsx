@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import React from "react";
 import styled from "styled-components";
 
@@ -8,17 +9,19 @@ import { ThreeScene } from "Types";
 const availableScenes = Object.entries(ThreeScene);
 
 const ControlsPanel = () => {
-	const { scene, setScene, themeId, setTheme } = useUiStore();
+	const { themeId, setTheme } = useUiStore();
+	const router = useRouter();
+	const slug = router.asPath.substring(1);
 	return (
 		<Styles>
 			{availableScenes.map(([key, value], i) => {
 				return (
 					<button
-						className={scene === value ? "active" : ""}
+						className={slug === value ? "active" : ""}
 						key={i}
-						onClick={(ev) => {
+						onClick={async (ev) => {
 							ev.preventDefault();
-							setScene(value);
+							await router.push(`/${value === ThreeScene.None ? "" : value}`);
 						}}
 					>
 						{key}

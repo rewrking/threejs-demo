@@ -5,15 +5,12 @@ import { ThreeScene } from "Types";
 import { LocalStorage } from "Utility";
 
 const STORAGE_KEY_THEME: string = "theme";
-const STORAGE_KEY_SCENE: string = "scene";
 
 class UiState extends BaseState {
 	initialized: boolean = false;
 
 	themeId: Theme = Theme.Dark;
 	theme: ThemeType = darkTheme;
-
-	scene: ThreeScene = ThreeScene.None;
 
 	@Action
 	initialize = () => {
@@ -26,8 +23,6 @@ class UiState extends BaseState {
 
 		this.setTheme(LocalStorage.get<Theme>(STORAGE_KEY_THEME, themeId));
 
-		let scene: ThreeScene = ThreeScene.None;
-		this.setScene(LocalStorage.get<ThreeScene>(STORAGE_KEY_SCENE, scene));
 		this.initialized = true;
 	};
 
@@ -48,12 +43,6 @@ class UiState extends BaseState {
 			default:
 				throw new Error("Code theme not implemented");
 		}
-	};
-
-	@Action
-	setScene = (scene: ThreeScene) => {
-		this.scene = scene;
-		LocalStorage.set(STORAGE_KEY_SCENE, this.scene);
 	};
 }
 

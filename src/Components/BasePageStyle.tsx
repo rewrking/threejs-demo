@@ -119,11 +119,11 @@ const datGuiCss = css`
 	}
 
 	li.cr .property-name {
-		width: 8rem !important;
+		/* width: 8rem !important; */
 		user-select: none;
 	}
 	li.cr .property-name + div {
-		width: calc(100% - 8rem) !important;
+		/* width: calc(100% - 8rem) !important; */
 	}
 
 	.dg .slider {
@@ -202,6 +202,7 @@ const BaseStyle = createGlobalStyle`
 
 	.router-progress-bar {
 		z-index: 50;
+		color: ${getCssVariable("primaryColor")} !important;
 	}
 
 

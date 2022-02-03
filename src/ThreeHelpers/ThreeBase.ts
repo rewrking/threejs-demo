@@ -12,12 +12,6 @@ abstract class ThreeBase {
 	public abstract getCamera(): THREE.Camera;
 	public abstract onCreateControls(element: HTMLElement): void;
 
-	public abstract onUpdate(): void;
-
-	onDraw(renderer: THREE.WebGLRenderer): void {
-		renderer.render(this.scene, this.getCamera());
-	}
-
 	setSize(width: number, height: number) {
 		this.options.width = width;
 		this.options.height = height;
@@ -26,6 +20,7 @@ abstract class ThreeBase {
 
 	protected onWindowResize?: (width: number, height: number) => void;
 
+	onUpdate?: () => void;
 	onCreateRenderer?: (renderer: THREE.WebGLRenderer) => void;
 	onMakeGui?: (gui: dat.GUI) => void;
 	dispose?: () => void;

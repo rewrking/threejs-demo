@@ -57,9 +57,9 @@ class ThreeExampleMorphTargets extends ThreeBase {
 		return this.camera;
 	}
 
-	onUpdate(): void {
+	onUpdate = (): void => {
 		this.controls?.update();
-	}
+	};
 
 	onWindowResize = (width: number, height: number): void => {
 		this.camera.aspect = width / height;
@@ -106,6 +106,8 @@ class ThreeExampleMorphTargets extends ThreeBase {
 
 			vertex.applyAxisAngle(direction, (Math.PI * x) / 2).toArray(twistPositions, twistPositions.length);
 		}
+
+		// end positions
 
 		// add the spherical positions as the first morph target
 		geometry.morphAttributes.position[0] = new THREE.Float32BufferAttribute(spherePositions, 3);

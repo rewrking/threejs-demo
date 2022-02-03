@@ -91,8 +91,8 @@ function useThreeRenderer<T extends ThreeBase>(
 			renderer.setSize(width, height);
 			renderer.setAnimationLoop(() => {
 				if (!!program && !!renderer) {
-					program.onUpdate();
-					program.onDraw(renderer);
+					program.onUpdate?.();
+					renderer.render(program.scene, program.getCamera());
 				}
 				if (!!stats) {
 					stats.update();

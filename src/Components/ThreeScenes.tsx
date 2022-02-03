@@ -75,45 +75,18 @@ const ThreeSceneStars = ({ camera }: Props) => {
 	);
 };*/
 
-const ThreeSceneMorphTargets = () => {
-	const { theme } = useUiStore();
-
-	const { ThreeRenderer } = useThreeRenderer(ThreeExampleMorphTargets);
-
-	return <ThreeRenderer />;
-};
-
-const ThreeSceneAnimationKeyframes = () => {
-	const { theme } = useUiStore();
-
-	const { ThreeRenderer } = useThreeRenderer(ThreeExampleAnimationKeyframes);
-	return <ThreeRenderer />;
-};
-
-const ThreeSceneMorphTargetFace = () => {
-	const { theme } = useUiStore();
-
-	const { ThreeRenderer } = useThreeRenderer(ThreeExampleMorphTargetFace);
-	return <ThreeRenderer />;
-};
-
 const ThreeSceneRouter = (/*props: Props*/) => {
-	const { scene } = useUiStore();
-	switch (scene) {
-		// case ThreeScene.Stars:
-		// return <ThreeSceneStars camera={{ position: [0, 15, 30] }} {...props} />;
-		// case ThreeScene.Box:
-		// 	return <ThreeSceneBox camera={{ position: [-3, 2, 5] }} {...props} />;
-		case ThreeScene.MorphTargets:
-			return <ThreeSceneMorphTargets />;
-		case ThreeScene.AnimationKeyframes:
-			return <ThreeSceneAnimationKeyframes />;
-		case ThreeScene.MorphTargetFace:
-			return <ThreeSceneMorphTargetFace />;
-		case ThreeScene.None:
-		default:
-			return <NoScene />;
-	}
+	// const { scene } = useUiStore();
+	// switch (scene) {
+	// case ThreeScene.Stars:
+	// return <ThreeSceneStars camera={{ position: [0, 15, 30] }} {...props} />;
+	// case ThreeScene.Box:
+	// 	return <ThreeSceneBox camera={{ position: [-3, 2, 5] }} {...props} />;
+	// 	case ThreeScene.None:
+	// 	default:
+	// 		return <NoScene />;
+	// }
+	return <NoScene />;
 };
 
 const NoScene = styled.div`

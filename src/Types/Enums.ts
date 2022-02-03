@@ -5,4 +5,5 @@ export enum ThreeScene {
 	MorphTargets = "morph-targets",
 	AnimationKeyframes = "animation-keyframes",
 	MorphTargetFace = "morph-target-face",
+	ClippingIntersection = "clipping-intersection",
 }
