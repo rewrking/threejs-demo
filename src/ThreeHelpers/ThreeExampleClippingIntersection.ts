@@ -5,6 +5,8 @@ import { Optional } from "@andrew-r-king/react-kitchen";
 
 import { ThreeBase, ThreeSceneOptions } from "./ThreeBase";
 
+// https://github.com/mrdoob/three.js/blob/master/examples/webgl_clipping_intersection.html
+
 class ThreeExampleClippingIntersection extends ThreeBase {
 	camera: THREE.PerspectiveCamera;
 	guiParams = {
@@ -20,8 +22,8 @@ class ThreeExampleClippingIntersection extends ThreeBase {
 
 	animationAction: Optional<THREE.AnimationAction> = null;
 	gui: Optional<dat.GUI> = null;
-	group: Optional<THREE.Group> = null;
-	helpers: Optional<THREE.Group> = null;
+	group: THREE.Group;
+	helpers: THREE.Group;
 
 	clipPlanes: THREE.Plane[];
 

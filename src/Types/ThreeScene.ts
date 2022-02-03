@@ -2,8 +2,9 @@ export enum ThreeScene {
 	None = "none",
 	// Box = "box",
 	// Stars = "stars",
-	MorphTargets = "morph-targets",
+	MorphTargetSphere = "morph-target-sphere",
 	AnimationKeyframes = "animation-keyframes",
 	MorphTargetFace = "morph-target-face",
 	ClippingIntersection = "clipping-intersection",
+	ClippingStencil = "clipping-stencil",
 }

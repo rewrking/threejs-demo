@@ -4,7 +4,7 @@ import { ThreeExampleLayout } from "Layouts";
 import { ThreeExampleAnimationKeyframes } from "ThreeHelpers";
 
 const Layout: NextPage = () => {
-	return <ThreeExampleLayout example={ThreeExampleAnimationKeyframes} />;
+	return <ThreeExampleLayout title="Example: Animation / Keyframes" example={ThreeExampleAnimationKeyframes} />;
 };
 
 export default Layout;

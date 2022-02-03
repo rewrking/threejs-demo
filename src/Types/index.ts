@@ -1,2 +1,2 @@
 export * from "./Vector";
-export * from "./Enums";
+export * from "./ThreeScene";

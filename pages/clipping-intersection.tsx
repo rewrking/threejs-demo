@@ -4,7 +4,7 @@ import { ThreeExampleLayout } from "Layouts";
 import { ThreeExampleClippingIntersection } from "ThreeHelpers";
 
 const Layout: NextPage = () => {
-	return <ThreeExampleLayout example={ThreeExampleClippingIntersection} />;
+	return <ThreeExampleLayout title="Example: Clipping / Intersection" example={ThreeExampleClippingIntersection} />;
 };
 
 export default Layout;

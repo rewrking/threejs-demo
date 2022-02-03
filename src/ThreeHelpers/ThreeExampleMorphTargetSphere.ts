@@ -7,9 +7,8 @@ import { ThreeBase, ThreeSceneOptions } from "./ThreeBase";
 
 // https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/webgl_morphtargets.html
 
-class ThreeExampleMorphTargets extends ThreeBase {
+class ThreeExampleMorphTargetSphere extends ThreeBase {
 	mesh: THREE.Mesh;
-	material: THREE.MeshPhongMaterial;
 	camera: THREE.PerspectiveCamera;
 	guiParams = {
 		Spherify: 0,
@@ -25,18 +24,18 @@ class ThreeExampleMorphTargets extends ThreeBase {
 		this.camera.position.z = 10;
 		scene.add(this.camera);
 
-		scene.add(new THREE.AmbientLight("#8fbcd4", 0.4));
+		scene.add(new THREE.AmbientLight(0x8fbcd4, 0.4));
 
-		const pointLight = new THREE.PointLight("#ffffff", 1);
+		const pointLight = new THREE.PointLight(0xffffff, 1);
 		this.camera.add(pointLight);
 
-		this.material = new THREE.MeshPhongMaterial({
-			color: "#00ff33",
+		const material = new THREE.MeshPhongMaterial({
+			color: 0x00ff33,
 			flatShading: true,
 		});
 
 		const geometry = this.createGeometry();
-		this.mesh = new THREE.Mesh(geometry, this.material);
+		this.mesh = new THREE.Mesh(geometry, material);
 		scene.add(this.mesh);
 	}
 
@@ -119,4 +118,4 @@ class ThreeExampleMorphTargets extends ThreeBase {
 	};
 }
 
-export { ThreeExampleMorphTargets };
+export { ThreeExampleMorphTargetSphere };

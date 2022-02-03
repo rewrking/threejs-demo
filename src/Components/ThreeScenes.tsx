@@ -6,14 +6,8 @@ import styled from "styled-components";
 // import { Canvas } from "@react-three/fiber";
 // import { StoreProps as FiberStoreProps } from "@react-three/fiber/dist/declarations/src/core/store";
 import { useUiStore } from "Stores";
+
 // import { getCssVariable } from "Theme";
-import {
-	useThreeRenderer,
-	ThreeExampleMorphTargets,
-	ThreeExampleAnimationKeyframes,
-	ThreeExampleMorphTargetFace,
-} from "ThreeHelpers";
-import { ThreeScene } from "Types";
 
 // import { BoxMeshPhysics, PlaneMeshPhysics, SphereMesh } from "./Three";
 

@@ -24,7 +24,7 @@ export type RenderSettings = THREE.WebGLRendererParameters & Partial<ThreeSceneO
 
 export type ThreeRendererResult<T extends ThreeBase> = {
 	ThreeRenderer: React.FunctionComponent<{}>;
-	program: T;
+	program: Optional<T>;
 };
 
 function useThreeRenderer<T extends ThreeBase>(
@@ -126,7 +126,7 @@ function useThreeRenderer<T extends ThreeBase>(
 
 	return {
 		ThreeRenderer,
-		program: program!,
+		program,
 	};
 }
 

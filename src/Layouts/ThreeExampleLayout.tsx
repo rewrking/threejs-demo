@@ -8,12 +8,13 @@ import { ThreeBase, useThreeRenderer } from "ThreeHelpers";
 
 type Props<T extends ThreeBase> = {
 	example: ClassType<T>;
+	title: string;
 };
 
-const ThreeExampleLayout = <T extends ThreeBase>({ example }: Props<T>) => {
+const ThreeExampleLayout = <T extends ThreeBase>({ example, title }: Props<T>) => {
 	const { ThreeRenderer } = useThreeRenderer(example);
 	return (
-		<Page title={example.name ?? "Untitled"}>
+		<Page title={title}>
 			<ThreeRenderer />
 			<ControlsPanel />
 		</Page>
