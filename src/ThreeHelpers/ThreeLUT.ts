@@ -14,7 +14,7 @@ class ThreeLUT {
 	readonly isLut: boolean = true;
 	private readonly defaultLookup: string;
 
-	constructor(private lookupTable: Dictionary<number[][]>, colormap: string, count: number = 32) {
+	constructor(public lookupTable: Dictionary<number[][]>, colormap: string, count: number = 32) {
 		const keys = Object.keys(lookupTable);
 		this.defaultLookup = keys.length > 0 ? keys[0] : "";
 
@@ -43,7 +43,7 @@ class ThreeLUT {
 	};
 
 	setColorMap = (colormap: string, count: number = 32): void => {
-		this.map = this.lookupTable[colormap] || [];
+		this.map = this.lookupTable[colormap] || this.lookupTable[this.defaultLookup];
 		this.n = count;
 
 		const step = 1.0 / this.n;

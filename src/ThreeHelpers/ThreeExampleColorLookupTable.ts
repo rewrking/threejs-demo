@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
+import { Dictionary } from "@andrew-r-king/react-kitchen";
+
 import { ThreeBase, ThreeSceneOptions } from "./ThreeBase";
 import { ThreeLUT } from "./ThreeLUT";
 
@@ -13,6 +15,13 @@ const ColorMapKeywords = {
 		[0.5, 0x00ff00],
 		[0.8, 0xffff00],
 		[1.0, 0xff0000],
+	],
+	revrainbow: [
+		[0.0, 0xff0000],
+		[0.2, 0xffff00],
+		[0.5, 0x00ff00],
+		[0.8, 0x00ffff],
+		[1.0, 0x0000ff],
 	],
 	cooltowarm: [
 		[0.0, 0x3c4ec2],
@@ -44,9 +53,10 @@ class ThreeExampleColorLookupTable extends ThreeBase {
 	private uiScene: THREE.Scene;
 	private mesh: THREE.Mesh;
 	private lut: ThreeLUT;
-	private colorMapChoices = ["rainbow", "cooltowarm", "blackbody", "grayscale"];
+	private colorMapChoices = Object.keys(ColorMapKeywords);
 	private guiParams = {
 		ColorMap: this.colorMapChoices[0],
+		Table: {} as Dictionary<number>,
 		ClipIntersection: false,
 		ShowHelpers: true,
 		PlaneConstant: 0,
@@ -54,7 +64,7 @@ class ThreeExampleColorLookupTable extends ThreeBase {
 
 	// Clipping
 	private clipPlanes: THREE.Plane[];
-	private helpers: THREE.Group;
+	private helpers?: THREE.Group;
 
 	private controls?: OrbitControls;
 	private gui?: dat.GUI;
@@ -161,7 +171,10 @@ class ThreeExampleColorLookupTable extends ThreeBase {
 
 			if (!!this.gui) {
 				const params = this.gui.addFolder("Parameters");
-				params.add(this.guiParams, "ColorMap", this.colorMapChoices).onChange(this.updateColors);
+				params.add(this.guiParams, "ColorMap", this.colorMapChoices).onChange(() => {
+					this.updateColors();
+					this.updateGuiTable();
+				});
 
 				/*params.add(this.guiParams, "ClipIntersection").onChange((value) => {
 					const material = this.mesh.material as THREE.MeshLambertMaterial;
@@ -187,12 +200,55 @@ class ThreeExampleColorLookupTable extends ThreeBase {
 						this.helpers.visible = value;
 					}
 				});
-				// params.add(this.guiParams, "Test");
 				params.open();
+
+				const table = this.updateGuiTable();
+
+				const lookup = this.gui.addFolder("LookupTable");
+				for (let i = 0; i < table.length; ++i) {
+					// const min = i > 0 ? table[i - 1][0] : 0.0;
+					// const max = i < table.length - 1 ? table[i + 1][0] : 1.0;
+					const min = 0.0;
+					const max = 1.0;
+					console.log(i, min, max);
+					lookup.add(this.guiParams.Table, `table[${i}]`, min, max, 0.01).onChange((value) => {
+						this.lut.lookupTable[this.guiParams.ColorMap][i][0] = value;
+						// this.updateRamp();
+						try {
+							this.updateColors();
+						} catch {}
+					});
+				}
 			}
 
 			this.updateColors();
 		});
+	};
+
+	private updateGuiTable = () => {
+		this.guiParams.Table = {};
+		const table = this.lut.lookupTable[this.guiParams.ColorMap] ?? [];
+		table.forEach((entry, i) => {
+			this.guiParams.Table[`table[${i}]`] = entry[0];
+		});
+		// console.log(this.guiParams.Table);
+
+		return table;
+	};
+
+	private updateRamp = () => {
+		const table = this.lut.lookupTable[this.guiParams.ColorMap] ?? [];
+		if (!!this.gui) {
+			const lookup = this.gui.__folders["LookupTable"];
+			for (let i = 0; i < table.length; ++i) {
+				const min = i > 0 ? table[i - 1][0] : 0.0;
+				const max = i < table.length - 1 ? table[i + 1][0] : 1.0;
+				const ctrlr = lookup.__controllers[i];
+				(ctrlr as any).__min = min;
+				(ctrlr as any).__max = max;
+				// console.log(i, min, max);
+			}
+		}
 	};
 
 	private updateColors = () => {
@@ -212,7 +268,7 @@ class ThreeExampleColorLookupTable extends ThreeBase {
 			if (!!color) {
 				colors.setXYZ(i, color.r, color.g, color.b);
 			} else {
-				console.log("Unable to determine color for value:", colorValue);
+				// throw new Error(`Unable to determine color for value: ${colorValue}`);
 			}
 		}
 
