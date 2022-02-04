@@ -1,15 +1,16 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-import { Optional } from "@andrew-r-king/react-kitchen";
-
 import { ThreeBase, ThreeSceneOptions } from "./ThreeBase";
 
 // https://github.com/mrdoob/three.js/blob/master/examples/webgl_clipping_intersection.html
 
 class ThreeExampleClippingIntersection extends ThreeBase {
-	camera: THREE.PerspectiveCamera;
-	guiParams = {
+	private camera: THREE.PerspectiveCamera;
+	private group: THREE.Group;
+	private helpers: THREE.Group;
+	private clipPlanes: THREE.Plane[];
+	private guiParams = {
 		ClipIntersection: true,
 		ShowHelpers: false,
 		PlaneConstantAll: 0,
@@ -18,14 +19,9 @@ class ThreeExampleClippingIntersection extends ThreeBase {
 		PlaneConstant2: 0,
 	};
 
-	controls: Optional<OrbitControls> = null;
-
-	animationAction: Optional<THREE.AnimationAction> = null;
-	gui: Optional<dat.GUI> = null;
-	group: THREE.Group;
-	helpers: THREE.Group;
-
-	clipPlanes: THREE.Plane[];
+	private controls?: OrbitControls;
+	private animationAction?: THREE.AnimationAction;
+	private gui?: dat.GUI;
 
 	constructor(scene: THREE.Scene, public options: ThreeSceneOptions) {
 		super(scene, options);

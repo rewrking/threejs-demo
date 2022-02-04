@@ -1,16 +1,14 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-import { Optional } from "@andrew-r-king/react-kitchen";
-
 import { ThreeBase, ThreeSceneOptions } from "./ThreeBase";
 
 // https://github.com/mrdoob/three.js/blob/master/examples/webgl_clipping_stencil.html
 
 class ThreeExampleClippingStencil extends ThreeBase {
-	clock: THREE.Clock;
-	camera: THREE.PerspectiveCamera;
-	guiParams = {
+	private clock: THREE.Clock;
+	private camera: THREE.PerspectiveCamera;
+	private guiParams = {
 		animate: true,
 		planeX: {
 			constant: 0,
@@ -29,11 +27,12 @@ class ThreeExampleClippingStencil extends ThreeBase {
 		},
 	};
 
-	controls: Optional<OrbitControls> = null;
 	private group: THREE.Group;
 	private helpers: THREE.PlaneHelper[];
 	private clipPlanes: THREE.Plane[];
 	private planeObjects: THREE.Mesh[];
+
+	private controls?: OrbitControls;
 
 	constructor(scene: THREE.Scene, public options: ThreeSceneOptions) {
 		super(scene, options);
@@ -100,9 +99,7 @@ class ThreeExampleClippingStencil extends ThreeBase {
 				stencilZPass: THREE.ReplaceStencilOp,
 			});
 			const po = new THREE.Mesh(planeGeom, planeMat);
-			po.onAfterRender = function (renderer) {
-				renderer.clearStencil();
-			};
+			po.onAfterRender = (renderer) => renderer.clearStencil();
 
 			po.renderOrder = i + 1.1;
 

@@ -4,26 +4,25 @@ import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
-import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
+import { Optional } from "@andrew-r-king/react-kitchen";
 
 import { ThreeBase, ThreeSceneOptions } from "./ThreeBase";
 
 class ThreeExampleAnimationKeyframes extends ThreeBase {
-	clock: THREE.Clock;
-	camera: THREE.PerspectiveCamera;
-	pmremGenerator: Optional<THREE.PMREMGenerator> = null;
-	mixer: Optional<THREE.AnimationMixer> = null;
-	guiParams = {
+	private clock: THREE.Clock;
+	private camera: THREE.PerspectiveCamera;
+	private guiParams = {
 		Frame: 0,
 		Speed: 1,
 		Play: true,
 	};
 
-	controls: Optional<OrbitControls> = null;
-
-	dracoLoader: Optional<DRACOLoader> = null;
-	animationAction: Optional<THREE.AnimationAction> = null;
-	gui: Optional<dat.GUI> = null;
+	private pmremGenerator?: THREE.PMREMGenerator;
+	private mixer?: THREE.AnimationMixer;
+	private controls?: OrbitControls;
+	private dracoLoader?: DRACOLoader;
+	private animationAction?: THREE.AnimationAction;
+	private gui?: dat.GUI;
 
 	constructor(scene: THREE.Scene, public options: ThreeSceneOptions) {
 		super(scene, options);
@@ -38,10 +37,7 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 	}
 
 	dispose = () => {
-		if (!!this.dracoLoader) {
-			this.dracoLoader.dispose();
-			this.dracoLoader = null;
-		}
+		this.dracoLoader?.dispose();
 	};
 
 	onCreateRenderer = (renderer: THREE.WebGLRenderer) => {
@@ -64,10 +60,12 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 		);
 	};
 
+	private metaData: Optional<object> = null;
 	private tempPlay: Optional<boolean> = null;
-	private metaData: Optional<any> = null;
-	private frameController: Optional<dat.GUIController> = null;
 	private changingFrameValue: boolean = false;
+
+	private frameController?: dat.GUIController;
+
 	private onLoadGLTF = (gltf: GLTF) => {
 		this.metaData = gltf.asset.extras ?? null;
 

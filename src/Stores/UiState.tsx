@@ -1,7 +1,6 @@
 import { BaseState, Action } from "@andrew-r-king/react-kitchen";
 
 import { Theme, ThemeType, darkTheme, lightTheme } from "Theme";
-import { ThreeScene } from "Types";
 import { LocalStorage } from "Utility";
 
 const STORAGE_KEY_THEME: string = "theme";

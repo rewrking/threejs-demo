@@ -1,21 +1,19 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-import { Optional } from "@andrew-r-king/react-kitchen";
-
 import { ThreeBase, ThreeSceneOptions } from "./ThreeBase";
 
 // https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/webgl_morphtargets.html
 
-class ThreeExampleMorphTargetSphere extends ThreeBase {
-	mesh: THREE.Mesh;
-	camera: THREE.PerspectiveCamera;
-	guiParams = {
+class ThreeExampleMorphTargetCube extends ThreeBase {
+	private mesh: THREE.Mesh;
+	private camera: THREE.PerspectiveCamera;
+	private guiParams = {
 		Spherify: 0,
 		Twist: 0,
 	};
 
-	controls: Optional<OrbitControls> = null;
+	private controls?: OrbitControls;
 
 	constructor(scene: THREE.Scene, public options: ThreeSceneOptions) {
 		super(scene, options);
@@ -118,4 +116,4 @@ class ThreeExampleMorphTargetSphere extends ThreeBase {
 	};
 }
 
-export { ThreeExampleMorphTargetSphere };
+export { ThreeExampleMorphTargetCube };

@@ -21,6 +21,7 @@ abstract class ThreeBase {
 	protected onWindowResize?: (width: number, height: number) => void;
 
 	onUpdate?: () => void;
+	onDraw?: (renderer: THREE.WebGLRenderer) => void;
 	onCreateRenderer?: (renderer: THREE.WebGLRenderer) => void;
 	onMakeGui?: (gui: dat.GUI) => void;
 	dispose?: () => void;

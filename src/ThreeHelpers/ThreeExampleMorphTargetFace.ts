@@ -5,26 +5,25 @@ import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader";
 
-import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
+import { Optional } from "@andrew-r-king/react-kitchen";
 
 import { ThreeBase, ThreeSceneOptions } from "./ThreeBase";
 
 class ThreeExampleMorphTargetFace extends ThreeBase {
-	clock: THREE.Clock;
-	camera: THREE.PerspectiveCamera;
-	pmremGenerator: Optional<THREE.PMREMGenerator> = null;
-	mixer: Optional<THREE.AnimationMixer> = null;
-	guiParams = {
+	private clock: THREE.Clock;
+	private camera: THREE.PerspectiveCamera;
+	private guiParams = {
 		Frame: 0,
 		Speed: 1,
 		Play: true,
 	};
 
-	controls: Optional<OrbitControls> = null;
-
-	ktx2Loader: Optional<KTX2Loader> = null;
-	animationAction: Optional<THREE.AnimationAction> = null;
-	gui: Optional<dat.GUI> = null;
+	private pmremGenerator?: THREE.PMREMGenerator;
+	private mixer?: THREE.AnimationMixer;
+	private controls?: OrbitControls;
+	private ktx2Loader?: KTX2Loader;
+	private animationAction?: THREE.AnimationAction;
+	private gui?: dat.GUI;
 
 	constructor(scene: THREE.Scene, public options: ThreeSceneOptions) {
 		super(scene, options);
@@ -39,10 +38,7 @@ class ThreeExampleMorphTargetFace extends ThreeBase {
 	}
 
 	dispose = () => {
-		if (!!this.ktx2Loader) {
-			this.ktx2Loader.dispose();
-			this.ktx2Loader = null;
-		}
+		this.ktx2Loader?.dispose();
 	};
 
 	onCreateRenderer = (renderer: THREE.WebGLRenderer) => {
@@ -67,10 +63,11 @@ class ThreeExampleMorphTargetFace extends ThreeBase {
 		);
 	};
 
-	private metaData: Optional<any> = null;
+	private metaData: Optional<object> = null;
 	private tempPlay: Optional<boolean> = null;
-	private frameController: Optional<dat.GUIController> = null;
 	private changingFrameValue: boolean = false;
+
+	private frameController?: dat.GUIController;
 
 	private onLoadGLTF = (gltf: GLTF) => {
 		this.metaData = gltf.asset.extras ?? null;
