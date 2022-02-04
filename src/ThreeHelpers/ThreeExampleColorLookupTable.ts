@@ -88,8 +88,6 @@ class ThreeExampleColorLookupTable extends ThreeBase {
 
 		this.clipPlanes = [new THREE.Plane(new THREE.Vector3(-0.3, -1, 0), this.guiParams.PlaneConstant)];
 
-		this.loadModel();
-
 		this.mesh = new THREE.Mesh(
 			undefined,
 			new THREE.MeshLambertMaterial({
@@ -102,12 +100,7 @@ class ThreeExampleColorLookupTable extends ThreeBase {
 		);
 		scene.add(this.mesh);
 
-		// helpers
-
-		this.helpers = new THREE.Group();
-		this.helpers.add(new THREE.PlaneHelper(this.clipPlanes[0], 2, 0xff0000));
-		this.helpers.visible = this.guiParams.ShowHelpers;
-		this.scene.add(this.helpers);
+		this.loadModel();
 	}
 
 	onCreateRenderer = (renderer: THREE.WebGLRenderer) => {
@@ -159,6 +152,12 @@ class ThreeExampleColorLookupTable extends ThreeBase {
 
 			this.mesh.geometry = geometry;
 			// console.log(this.mesh);
+
+			const helperSize: number = 4;
+			this.helpers = new THREE.Group();
+			this.helpers.add(new THREE.PlaneHelper(this.clipPlanes[0], helperSize, 0xff0000));
+			this.helpers.visible = this.guiParams.ShowHelpers;
+			this.scene.add(this.helpers);
 
 			if (!!this.gui) {
 				const params = this.gui.addFolder("Parameters");
