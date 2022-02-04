@@ -6,6 +6,37 @@ import { ThreeLUT } from "./ThreeLUT";
 
 // https://github.com/mrdoob/three.js/blob/master/examples/webgl_geometry_colors_lookuptable.html
 
+const ColorMapKeywords = {
+	rainbow: [
+		[0.0, 0x0000ff],
+		[0.2, 0x00ffff],
+		[0.5, 0x00ff00],
+		[0.8, 0xffff00],
+		[1.0, 0xff0000],
+	],
+	cooltowarm: [
+		[0.0, 0x3c4ec2],
+		[0.2, 0x9bbcff],
+		[0.5, 0xdcdcdc],
+		[0.8, 0xf6a385],
+		[1.0, 0xb40426],
+	],
+	blackbody: [
+		[0.0, 0x000000],
+		[0.2, 0x780000],
+		[0.5, 0xe63200],
+		[0.8, 0xffff00],
+		[1.0, 0xffffff],
+	],
+	grayscale: [
+		[0.0, 0x000000],
+		[0.2, 0x404040],
+		[0.5, 0x7f7f80],
+		[0.8, 0xbfbfbf],
+		[1.0, 0xffffff],
+	],
+};
+
 class ThreeExampleColorLookupTable extends ThreeBase {
 	private camera: THREE.PerspectiveCamera;
 	private orthoCamera: THREE.OrthographicCamera;
@@ -15,10 +46,18 @@ class ThreeExampleColorLookupTable extends ThreeBase {
 	private lut: ThreeLUT;
 	private colorMapChoices = ["rainbow", "cooltowarm", "blackbody", "grayscale"];
 	private guiParams = {
-		colorMap: this.colorMapChoices[0],
+		ColorMap: this.colorMapChoices[0],
+		ClipIntersection: false,
+		ShowHelpers: true,
+		PlaneConstant: 0,
 	};
 
+	// Clipping
+	private clipPlanes: THREE.Plane[];
+	private helpers: THREE.Group;
+
 	private controls?: OrbitControls;
+	private gui?: dat.GUI;
 
 	constructor(scene: THREE.Scene, public options: ThreeSceneOptions) {
 		super(scene, options);
@@ -35,7 +74,7 @@ class ThreeExampleColorLookupTable extends ThreeBase {
 		this.orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 1, 2);
 		this.orthoCamera.position.set(0.5, 0, 1);
 
-		this.lut = new ThreeLUT(this.guiParams.colorMap);
+		this.lut = new ThreeLUT(ColorMapKeywords, this.guiParams.ColorMap);
 
 		this.sprite = new THREE.Sprite(
 			new THREE.SpriteMaterial({
@@ -47,28 +86,37 @@ class ThreeExampleColorLookupTable extends ThreeBase {
 		this.uiScene = new THREE.Scene();
 		this.uiScene.add(this.sprite);
 
+		this.clipPlanes = [new THREE.Plane(new THREE.Vector3(-0.3, -1, 0), this.guiParams.PlaneConstant)];
+
+		this.loadModel();
+
 		this.mesh = new THREE.Mesh(
 			undefined,
 			new THREE.MeshLambertMaterial({
 				side: THREE.DoubleSide,
 				color: 0xf5f5f5,
+				clippingPlanes: this.clipPlanes,
+				clipIntersection: this.guiParams.ClipIntersection,
 				vertexColors: true,
 			})
 		);
 		scene.add(this.mesh);
 
-		this.loadModel();
+		// helpers
+
+		this.helpers = new THREE.Group();
+		this.helpers.add(new THREE.PlaneHelper(this.clipPlanes[0], 2, 0xff0000));
+		this.helpers.visible = this.guiParams.ShowHelpers;
+		this.scene.add(this.helpers);
 	}
 
 	onCreateRenderer = (renderer: THREE.WebGLRenderer) => {
+		renderer.localClippingEnabled = true;
 		renderer.autoClear = false;
 	};
 
 	onMakeGui = (gui: dat.GUI): void => {
-		const folder = gui.addFolder("Parameters");
-		folder.add(this.guiParams, "colorMap", this.colorMapChoices).onChange(this.updateColors);
-
-		folder.open();
+		this.gui = gui;
 	};
 
 	public getCamera(): THREE.Camera {
@@ -110,29 +158,62 @@ class ThreeExampleColorLookupTable extends ThreeBase {
 			geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
 
 			this.mesh.geometry = geometry;
+			// console.log(this.mesh);
+
+			if (!!this.gui) {
+				const params = this.gui.addFolder("Parameters");
+				params.add(this.guiParams, "ColorMap", this.colorMapChoices).onChange(this.updateColors);
+
+				/*params.add(this.guiParams, "ClipIntersection").onChange((value) => {
+					const material = this.mesh.material as THREE.MeshLambertMaterial;
+					material.clipIntersection = value;
+					this.updateColors();
+				});*/
+
+				params
+					.add(
+						this.guiParams,
+						"PlaneConstant",
+						this.mesh.geometry.boundingBox?.min.y ?? -1,
+						this.mesh.geometry.boundingBox?.max.y ?? 1
+					)
+					.step(0.01)
+					.onChange((value) => {
+						this.clipPlanes[0].constant = value;
+						this.guiParams.PlaneConstant = value;
+					});
+
+				params.add(this.guiParams, "ShowHelpers").onChange((value) => {
+					if (!!this.helpers) {
+						this.helpers.visible = value;
+					}
+				});
+				// params.add(this.guiParams, "Test");
+				params.open();
+			}
+
 			this.updateColors();
 		});
 	};
 
 	private updateColors = () => {
-		this.lut.setColorMap(this.guiParams.colorMap);
+		this.lut.setColorMap(this.guiParams.ColorMap);
 
 		this.lut.setMin(0);
 		this.lut.setMax(2000);
 
 		const geometry = this.mesh.geometry;
-		const pressures = geometry.attributes.pressure;
+		const pressures = geometry.attributes["pressure"];
 		const colors = geometry.attributes.color;
 
 		for (let i = 0; i < pressures.array.length; i++) {
 			const colorValue = pressures.array[i];
 
 			const color = this.lut.getColor(colorValue);
-
-			if (color === undefined) {
-				console.log("Unable to determine color for value:", colorValue);
-			} else {
+			if (!!color) {
 				colors.setXYZ(i, color.r, color.g, color.b);
+			} else {
+				console.log("Unable to determine color for value:", colorValue);
 			}
 		}
 

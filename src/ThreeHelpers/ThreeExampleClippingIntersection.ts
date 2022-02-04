@@ -20,7 +20,6 @@ class ThreeExampleClippingIntersection extends ThreeBase {
 	};
 
 	private controls?: OrbitControls;
-	private animationAction?: THREE.AnimationAction;
 	private gui?: dat.GUI;
 
 	constructor(scene: THREE.Scene, public options: ThreeSceneOptions) {
@@ -66,7 +65,7 @@ class ThreeExampleClippingIntersection extends ThreeBase {
 		this.helpers.add(new THREE.PlaneHelper(this.clipPlanes[0], 2, 0xff0000));
 		this.helpers.add(new THREE.PlaneHelper(this.clipPlanes[1], 2, 0x00ff00));
 		this.helpers.add(new THREE.PlaneHelper(this.clipPlanes[2], 2, 0x0000ff));
-		this.helpers.visible = false;
+		this.helpers.visible = this.guiParams.ShowHelpers;
 		this.scene.add(this.helpers);
 	}
 

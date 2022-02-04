@@ -1,41 +1,49 @@
 import { Color } from "three";
 
+import { Dictionary } from "@andrew-r-king/react-kitchen";
+
 // https://github.com/mrdoob/three.js/blob/master/examples/jsm/math/Lut.js
 
 class ThreeLUT {
-	lut: Color[] = [];
-	map: number[] = [];
-	n: number = 0;
-	minV: number = 0;
-	maxV: number = 1;
-	readonly isLut: boolean = true;
+	private lut: Color[] = [];
+	private map: number[][] = [];
+	private n: number = 0;
+	private minV: number = 0;
+	private maxV: number = 1;
 
-	constructor(colormap: string, count: number = 32) {
+	readonly isLut: boolean = true;
+	private readonly defaultLookup: string;
+
+	constructor(private lookupTable: Dictionary<number[][]>, colormap: string, count: number = 32) {
+		const keys = Object.keys(lookupTable);
+		this.defaultLookup = keys.length > 0 ? keys[0] : "";
+
 		this.setColorMap(colormap, count);
 	}
 
-	set = (value: ThreeLUT) => {
-		if (value.isLut === true) {
-			this.copy(value);
+	copy = (lut: ThreeLUT): boolean => {
+		if (lut.isLut === true) {
+			this.lut = lut.lut;
+			this.map = lut.map;
+			this.n = lut.n;
+			this.minV = lut.minV;
+			this.maxV = lut.maxV;
+			return true;
 		}
 
-		return this;
+		return false;
 	};
 
-	setMin = (min: number) => {
+	setMin = (min: number): void => {
 		this.minV = min;
-
-		return this;
 	};
 
-	setMax = (max: number) => {
+	setMax = (max: number): void => {
 		this.maxV = max;
-
-		return this;
 	};
 
-	setColorMap = (colormap: string, count: number = 32) => {
-		this.map = ColorMapKeywords[colormap] || ColorMapKeywords.rainbow;
+	setColorMap = (colormap: string, count: number = 32): void => {
+		this.map = this.lookupTable[colormap] || [];
 		this.n = count;
 
 		const step = 1.0 / this.n;
@@ -57,21 +65,9 @@ class ThreeLUT {
 				}
 			}
 		}
-
-		return this;
 	};
 
-	copy = (lut: ThreeLUT) => {
-		this.lut = lut.lut;
-		this.map = lut.map;
-		this.n = lut.n;
-		this.minV = lut.minV;
-		this.maxV = lut.maxV;
-
-		return this;
-	};
-
-	getColor = (alpha: number) => {
+	getColor = (alpha: number): Color | null => {
 		if (alpha <= this.minV) {
 			alpha = this.minV;
 		} else if (alpha >= this.maxV) {
@@ -81,18 +77,20 @@ class ThreeLUT {
 		alpha = (alpha - this.minV) / (this.maxV - this.minV);
 
 		let colorPosition = Math.round(alpha * this.n);
-		colorPosition == this.n ? (colorPosition -= 1) : colorPosition;
+		if (colorPosition == this.n) {
+			colorPosition -= 1;
+		}
 
-		return this.lut[colorPosition];
+		return this.lut[colorPosition] ?? null;
 	};
 
-	addColorMap = (name: string, arrayOfColors: number[]) => {
-		ColorMapKeywords[name] = arrayOfColors;
+	addColorMap = (name: string, arrayOfColors: number[][]): ThreeLUT => {
+		this.lookupTable[name] = arrayOfColors;
 
 		return this;
 	};
 
-	createCanvas = () => {
+	createCanvas = (): HTMLCanvasElement => {
 		const canvas = document.createElement("canvas");
 		canvas.width = 1;
 		canvas.height = this.n;
@@ -102,7 +100,7 @@ class ThreeLUT {
 		return canvas;
 	};
 
-	updateCanvas = (canvas: HTMLCanvasElement) => {
+	updateCanvas = (canvas: HTMLCanvasElement): HTMLCanvasElement => {
 		const ctx = canvas.getContext("2d", { alpha: false });
 		if (!!ctx) {
 			const imageData = ctx.getImageData(0, 0, 1, this.n);
@@ -143,35 +141,4 @@ class ThreeLUT {
 	};
 }
 
-const ColorMapKeywords = {
-	rainbow: [
-		[0.0, 0x0000ff],
-		[0.2, 0x00ffff],
-		[0.5, 0x00ff00],
-		[0.8, 0xffff00],
-		[1.0, 0xff0000],
-	],
-	cooltowarm: [
-		[0.0, 0x3c4ec2],
-		[0.2, 0x9bbcff],
-		[0.5, 0xdcdcdc],
-		[0.8, 0xf6a385],
-		[1.0, 0xb40426],
-	],
-	blackbody: [
-		[0.0, 0x000000],
-		[0.2, 0x780000],
-		[0.5, 0xe63200],
-		[0.8, 0xffff00],
-		[1.0, 0xffffff],
-	],
-	grayscale: [
-		[0.0, 0x000000],
-		[0.2, 0x404040],
-		[0.5, 0x7f7f80],
-		[0.8, 0xbfbfbf],
-		[1.0, 0xffffff],
-	],
-};
-
-export { ThreeLUT, ColorMapKeywords };
+export { ThreeLUT };

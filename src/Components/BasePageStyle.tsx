@@ -101,10 +101,10 @@ const datGuiCss = css`
 		color: #fff !important;
 	}
 	.dg .cr.string {
-		border-left-color: #1ed36f !important;
+		border-left-color: ${getCssVariable("primaryColor")} !important;
 	}
 	.dg .cr.string input[type="text"] {
-		color: #1ed36f !important;
+		color: ${getCssVariable("primaryColor")} !important;
 	}
 	.dg .c .slider-fg {
 		background-color: ${getCssVariable("primaryColor")} !important;
