@@ -1,22 +1,13 @@
 import * as THREE from "three";
 
-import { Optional } from "@andrew-r-king/react-kitchen";
-
 type LineSegment2DResult = {
-	vertices: Float32Array;
-	colors: Float32Array;
+	vertices: THREE.BufferAttribute;
+	colors: THREE.BufferAttribute;
 };
 
-function makeLineSegment2D(
-	steps: Float32Array,
-	colorSteps: Float32Array,
-	thickness: number
-): Optional<LineSegment2DResult> {
+function makeLineSegment2D(thickness: number, steps: Float32Array): THREE.BufferAttribute {
 	const points = steps.length / 2;
-	if (points < 2) return null;
-
-	let vertices: Float32Array = new Float32Array();
-	let colors: Float32Array = new Float32Array();
+	let vertices: Float32Array = new Float32Array((points - 1) * 6);
 
 	for (let i = 0; i < points - 2; ++i) {
 		const xA: number = steps[i];
@@ -51,16 +42,23 @@ function makeLineSegment2D(
 		vertices[i + 9] = yB - offsetY;
 	}
 
-	return { vertices, colors };
+	return new THREE.BufferAttribute(vertices, 3);
 }
 
+/*function makeColorBufferContinuous2D(vertices: THREE.BufferAttribute, colorSteps: Float32Array) {
+	return new THREE.BufferAttribute(colors, 3);
+}*/
+
 class ThreeLUTContinuous2 {
-	line: THREE.Line;
+	line: THREE.Mesh;
 
 	constructor() {
 		const geometry = new THREE.BufferGeometry();
 
+		THREE.LineSegments;
+
 		// prettier-ignore
+		// const vertices = makeLineSegment2D(1, new Float32Array([
 		const vertices = new Float32Array([
 			0,-0.5,
 			0,-0.25,
@@ -68,7 +66,7 @@ class ThreeLUTContinuous2 {
 			0,0.25,
 			0,0.5,
 		]);
-		geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 2));
+		geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
 
 		// prettier-ignore
 		const colors = new Float32Array([
@@ -84,8 +82,10 @@ class ThreeLUTContinuous2 {
 			vertexColors: true,
 		});
 
-		this.line = new THREE.Line(geometry, material);
-		this.line.computeLineDistances();
+		// this.line = new THREE.Line(geometry, material);
+		// this.line.computeLineDistances();
+
+		this.line = new THREE.Mesh(geometry, material);
 	}
 }
 
