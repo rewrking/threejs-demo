@@ -4,7 +4,7 @@ import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 // https://github.com/mrdoob/three.js/blob/master/examples/jsm/math/Lut.js
 
-class ThreeLUT {
+class ThreeLUTContinuous {
 	private lut: Color[] = [];
 	private map: number[][] = [];
 	private n: number = 0;
@@ -21,7 +21,7 @@ class ThreeLUT {
 		this.setColorMap(colormap, count);
 	}
 
-	copy = (lut: ThreeLUT): boolean => {
+	copy = (lut: ThreeLUTContinuous): boolean => {
 		if (lut.isLut === true) {
 			this.lut = lut.lut;
 			this.map = lut.map;
@@ -84,7 +84,7 @@ class ThreeLUT {
 		return this.lut[colorPosition] ?? null;
 	};
 
-	addColorMap = (name: string, arrayOfColors: number[][]): ThreeLUT => {
+	addColorMap = (name: string, arrayOfColors: number[][]): ThreeLUTContinuous => {
 		this.lookupTable[name] = arrayOfColors;
 
 		return this;
@@ -141,4 +141,4 @@ class ThreeLUT {
 	};
 }
 
-export { ThreeLUT };
+export { ThreeLUTContinuous };

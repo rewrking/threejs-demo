@@ -128,6 +128,8 @@ class ThreeExampleClippingIntersection extends ThreeBase {
 				objFolder.add(object, "visible").name(`sphere[${i}]`);
 				++i;
 			});
+
+			objFolder.open();
 		}
 	};
 

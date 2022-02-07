@@ -135,13 +135,16 @@ class ThreeExampleMorphTargetFace extends ThreeBase {
 						.name(key.replace("blendShape1.", ""))
 						.listen();
 				}
+				morphs.open();
 			}
+
 			const objFolder = this.gui.addFolder("Objects");
 			mesh.traverse((object) => {
 				if (object.name.length === 0) return;
 
 				objFolder.add(object, "visible").name(object.name);
 			});
+			objFolder.open();
 		}
 		this.playAnimation(this.guiParams.Play);
 	};

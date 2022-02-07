@@ -85,6 +85,7 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 				meta.add(this.metaData, "author");
 				meta.add(this.metaData, "license");
 				meta.add(this.metaData, "source");
+				meta.open();
 			}
 
 			const folder = this.gui.addFolder("Parameters");
@@ -111,6 +112,7 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 					}
 				})
 				.listen();
+			folder.open();
 
 			// this.animationAction.loop = THREE.LoopPingPong;
 			this.animationAction.setEffectiveTimeScale(this.guiParams.Speed);
@@ -135,6 +137,7 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 
 				const sceneFolder = this.gui.addFolder("Scene");
 				sceneFolder.add(trolly, "visible");
+				sceneFolder.open();
 			}
 
 			const objFolder = this.gui.addFolder("Objects");
@@ -143,8 +146,7 @@ class ThreeExampleAnimationKeyframes extends ThreeBase {
 
 				objFolder.add(object, "visible").name(object.name);
 			});
-
-			folder.open();
+			objFolder.open();
 		}
 
 		this.playAnimation(this.guiParams.Play);

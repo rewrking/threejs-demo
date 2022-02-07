@@ -4,7 +4,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { ThreeBase, ThreeSceneOptions } from "./ThreeBase";
-import { ThreeLUT } from "./ThreeLUT";
+import { ThreeLUTContinuous } from "./ThreeLUTContinuous";
+import { ThreeLUTContinuous2 } from "./ThreeLUTContinuous2";
 
 // https://github.com/mrdoob/three.js/blob/master/examples/webgl_geometry_colors_lookuptable.html
 
@@ -49,10 +50,11 @@ const ColorMapKeywords = {
 class ThreeExampleColorLookupTable extends ThreeBase {
 	private camera: THREE.PerspectiveCamera;
 	private orthoCamera: THREE.OrthographicCamera;
-	private sprite: THREE.Sprite;
+	// private sprite: THREE.Sprite;
 	private uiScene: THREE.Scene;
 	private mesh: THREE.Mesh;
-	private lut: ThreeLUT;
+	private lut: ThreeLUTContinuous;
+	private lut2: ThreeLUTContinuous2;
 	private colorMapChoices = Object.keys(ColorMapKeywords);
 	private guiParams = {
 		ColorMap: this.colorMapChoices[0],
@@ -84,17 +86,17 @@ class ThreeExampleColorLookupTable extends ThreeBase {
 		this.orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 1, 2);
 		this.orthoCamera.position.set(0.5, 0, 1);
 
-		this.lut = new ThreeLUT(ColorMapKeywords, this.guiParams.ColorMap);
+		this.lut = new ThreeLUTContinuous(ColorMapKeywords, this.guiParams.ColorMap);
 
-		this.sprite = new THREE.Sprite(
-			new THREE.SpriteMaterial({
-				map: new THREE.CanvasTexture(this.lut.createCanvas()),
-			})
-		);
-		this.sprite.scale.x = 0.125;
+		// this.sprite = new THREE.Sprite(
+		// 	new THREE.SpriteMaterial({
+		// 		map: new THREE.CanvasTexture(this.lut.createCanvas()),
+		// 	})
+		// );
+		// this.sprite.scale.x = 0.125;
 
 		this.uiScene = new THREE.Scene();
-		this.uiScene.add(this.sprite);
+		// this.uiScene.add(this.sprite);
 
 		this.clipPlanes = [new THREE.Plane(new THREE.Vector3(-0.3, -1, 0), this.guiParams.PlaneConstant)];
 
@@ -109,6 +111,9 @@ class ThreeExampleColorLookupTable extends ThreeBase {
 			})
 		);
 		scene.add(this.mesh);
+
+		this.lut2 = new ThreeLUTContinuous2();
+		this.uiScene.add(this.lut2.line);
 
 		this.loadModel();
 	}
@@ -219,6 +224,8 @@ class ThreeExampleColorLookupTable extends ThreeBase {
 						} catch {}
 					});
 				}
+
+				lookup.open();
 			}
 
 			this.updateColors();
@@ -274,11 +281,11 @@ class ThreeExampleColorLookupTable extends ThreeBase {
 
 		colors.needsUpdate = true;
 
-		const map = this.sprite.material.map;
-		if (!!map) {
-			this.lut.updateCanvas(map.image);
-			map.needsUpdate = true;
-		}
+		// const map = this.sprite.material.map;
+		// if (!!map) {
+		// 	this.lut.updateCanvas(map.image);
+		// 	map.needsUpdate = true;
+		// }
 	};
 }
 
