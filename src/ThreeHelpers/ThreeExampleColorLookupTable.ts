@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-import { Dictionary } from "@andrew-r-king/react-kitchen";
+import { Dictionary } from "@rewrking/react-kitchen";
 
 import { ThreeBase, ThreeSceneOptions } from "./ThreeBase";
 import { ThreeLUTContinuous } from "./ThreeLUTContinuous";

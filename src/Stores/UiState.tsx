@@ -1,4 +1,4 @@
-import { BaseState, Action } from "@andrew-r-king/react-kitchen";
+import { BaseState, Action } from "@rewrking/react-kitchen";
 
 import { Theme, ThemeType, darkTheme, lightTheme } from "Theme";
 import { LocalStorage } from "Utility";

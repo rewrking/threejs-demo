@@ -18,7 +18,7 @@
 		"Utility": "./src/Utility"
 	},
 	"dependencies": {
-		"@andrew-r-king/react-kitchen": "^0.1.37",
+		"@rewrking/react-kitchen": "^0.1.37",
 		"@badrap/bar-of-progress": "^0.1.2",
 		"@react-three/cannon": "^4.6.0",
 		"@react-three/drei": "^8.4.0",

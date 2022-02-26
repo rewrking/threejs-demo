@@ -6,7 +6,7 @@ import styled from "styled-components";
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module";
 
-import { ClassType, Optional } from "@andrew-r-king/react-kitchen";
+import { ClassType, Optional } from "@rewrking/react-kitchen";
 
 import { useResize } from "Hooks";
 

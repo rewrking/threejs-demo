@@ -1,4 +1,4 @@
-import { Dictionary } from "@andrew-r-king/react-kitchen";
+import { Dictionary } from "@rewrking/react-kitchen";
 
 const globalFonts: Dictionary<string> = {
 	paragraph: '"Barlow Semi Condensed", sans-serif',

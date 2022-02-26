@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ClassType } from "@andrew-r-king/react-kitchen";
+import { ClassType } from "@rewrking/react-kitchen";
 
 import { Page } from "Components";
 import { ControlsPanel } from "Components/ControlsPanel";
