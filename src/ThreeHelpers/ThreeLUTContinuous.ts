@@ -1,6 +1,6 @@
 import { Color } from "three";
 
-import { Dictionary } from "@rewrking/react-kitchen";
+import { Dictionary } from "Types";
 
 // https://github.com/mrdoob/three.js/blob/master/examples/jsm/math/Lut.js
 

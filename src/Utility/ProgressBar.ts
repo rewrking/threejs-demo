@@ -1,7 +1,8 @@
 import { Router } from "next/router";
 
 import ProgressBar from "@badrap/bar-of-progress";
-import { Optional } from "@rewrking/react-kitchen";
+
+import { Optional } from "Types";
 
 let progress: Optional<ProgressBar> = null;
 if (progress === null) {
