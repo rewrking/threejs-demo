@@ -4,7 +4,9 @@ import React from "react";
 import { BaseStyle, ThemeProvider } from "Components";
 import { Providers } from "Stores";
 
-type Props = AppProps;
+type Props = AppProps & {
+	Component: any;
+};
 
 const Main = ({ Component, pageProps }: Props) => {
 	return (
