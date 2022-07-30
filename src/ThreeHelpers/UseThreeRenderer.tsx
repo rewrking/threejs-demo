@@ -1,6 +1,6 @@
 import * as dat from "dat.gui";
 import debounce from "lodash/debounce";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import React from "react";
 import styled from "styled-components";
 import * as THREE from "three";
@@ -36,11 +36,11 @@ function useThreeRenderer<T extends ThreeBase>(
 	}
 ): ThreeRendererResult<T> {
 	// Everything is created on the first render, so state is mutable
-	let [renderer] = useState<Optional<THREE.WebGLRenderer>>(null);
+	let renderer = useMemo<Optional<THREE.WebGLRenderer>>(() => null, []);
 
-	let [program] = useState<Optional<T>>(null);
-	let [gui] = useState<Optional<dat.GUI>>(null);
-	let [stats] = useState<Optional<Stats>>(null);
+	let program = useMemo<Optional<T>>(() => null, []);
+	let gui = useMemo<Optional<dat.GUI>>(() => null, []);
+	let stats = useMemo<Optional<Stats>>(() => null, []);
 
 	useResize(
 		debounce((ev) => {
@@ -54,9 +54,9 @@ function useThreeRenderer<T extends ThreeBase>(
 	);
 
 	const ref = useCallback((node: Optional<HTMLDivElement>) => {
-		// console.log("ref called");
+		console.log("ref called");
 		if (!!program) {
-			// console.log("destroy");
+			console.log("destroy");
 			if (!!gui) {
 				gui.destroy();
 				gui = null;
@@ -72,7 +72,7 @@ function useThreeRenderer<T extends ThreeBase>(
 		}
 
 		if (!!node) {
-			// console.log("create");
+			console.log("create");
 			let scene = new THREE.Scene();
 
 			let { width, height, showStats, ...renderParameters } = settings;
