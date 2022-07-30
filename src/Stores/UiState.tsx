@@ -5,7 +5,8 @@ import { LocalStorage } from "Utility";
 
 const STORAGE_KEY_THEME: string = "theme";
 
-class UiState extends BaseState {
+@BaseState()
+class UiState {
 	initialized: boolean = false;
 
 	themeId: Theme = Theme.Dark;

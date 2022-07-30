@@ -10,7 +10,7 @@ type Props = {
 	title: string;
 };
 
-const Page = ({ title, children }: Props) => {
+const Page = ({ children, ...props }: Props) => {
 	const { theme, initialize, initialized } = useUiStore();
 
 	useEffect(() => {
@@ -23,10 +23,12 @@ const Page = ({ title, children }: Props) => {
 		document.body.style.backgroundColor = theme.bodyBackground;
 	}, [theme]);
 
+	const title = `${props.title} | ThreeJS Demo`;
+
 	return (
 		<>
 			<Head>
-				<title>{title} | ThreeJS Demo</title>
+				<title>{title}</title>
 				<meta
 					name="viewport"
 					content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"

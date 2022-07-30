@@ -1,23 +1,27 @@
-import Document, { Html, Head, Main, NextScript, DocumentContext } from "next/document";
+import Document, { Html, Head, Main, NextScript, DocumentContext, DocumentProps } from "next/document";
 import React from "react";
 import { ServerStyleSheet } from "styled-components";
 
-class MyDocument extends Document {
-	/*static async getInitialProps(ctx: DocumentContext) {
+type Props = DocumentProps & {};
+
+class MyDocument extends Document<Props> {
+	// Note: this gets rid of the "flicker" during first paint
+	static async getInitialProps(ctx: any) {
 		const sheet = new ServerStyleSheet();
 		const originalRenderPage = ctx.renderPage;
 
 		try {
 			ctx.renderPage = () =>
 				originalRenderPage({
-					enhanceApp: (App) => (props) => sheet.collectStyles(<App {...props} />),
+					enhanceApp: (App: any) => (props: any) => sheet.collectStyles(<App {...props} />),
 				});
-			const { styles, ...initialProps } = await Document.getInitialProps(ctx);
+
+			const initialProps = await Document.getInitialProps(ctx);
 			return {
 				...initialProps,
 				styles: (
 					<>
-						{styles}
+						{initialProps.styles}
 						{sheet.getStyleElement()}
 					</>
 				),
@@ -25,7 +29,7 @@ class MyDocument extends Document {
 		} finally {
 			sheet.seal();
 		}
-	}*/
+	}
 
 	render() {
 		return (
