@@ -54,9 +54,9 @@ function useThreeRenderer<T extends ThreeBase>(
 	);
 
 	const ref = useCallback((node: Optional<HTMLDivElement>) => {
-		console.log("ref called");
+		// console.log("ref called");
 		if (!!program) {
-			console.log("destroy");
+			// console.log("destroy");
 			if (!!gui) {
 				gui.destroy();
 				gui = null;
@@ -72,7 +72,7 @@ function useThreeRenderer<T extends ThreeBase>(
 		}
 
 		if (!!node) {
-			console.log("create");
+			// console.log("create");
 			let scene = new THREE.Scene();
 
 			let { width, height, showStats, ...renderParameters } = settings;
